@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bojkela Barber - Premium Portal</title>
+    <title>Bojkela Barber - Admin Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -14,8 +14,6 @@
             --gold-hover: #e5c158;
             --text-light: #f5f5f5;
             --text-muted: #a0a0a0;
-            --danger: #e74c3c;
-            --success: #2ecc71;
         }
 
         * {
@@ -37,7 +35,7 @@
 
         .container {
             width: 100%;
-            max-width: 480px;
+            max-width: 520px;
             background: var(--card-black);
             border: 1px solid rgba(197, 160, 89, 0.3);
             border-radius: 16px;
@@ -139,6 +137,99 @@
             display: none;
         }
 
+        /* ADMIN MENI I SEKCIJE */
+        .admin-top-menu {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #0b0b0b;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-bottom: 20px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .admin-top-menu a {
+            color: var(--gold);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .admin-top-menu a:hover {
+            text-decoration: underline;
+        }
+
+        .welcome-box {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(16, 16, 16, 0.8) 100%);
+            border-left: 4px solid var(--gold);
+            padding: 14px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .welcome-box h3 {
+            color: var(--gold);
+            font-size: 15px;
+            margin-bottom: 4px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .welcome-box p {
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+        .notifications-box {
+            background: #111;
+            border: 1px dashed var(--border-gold);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .notifications-box strong {
+            color: var(--gold);
+            display: block;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            font-size: 11px;
+        }
+
+        /* ISTAKNUTI TERMINI U SREDINI */
+        .featured-appointments {
+            background: #111;
+            border: 1px solid var(--border-gold);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.1);
+        }
+
+        .featured-appointments h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--gold);
+            font-size: 18px;
+            text-align: center;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .appointment-card {
+            background: #0b0b0b;
+            border: 1px solid #333;
+            border-left: 3px solid var(--gold);
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
         .slots-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -178,27 +269,6 @@
             text-decoration: line-through;
         }
 
-        .admin-badge {
-            background: var(--gold);
-            color: #000;
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            display: inline-block;
-            margin-bottom: 15px;
-        }
-
-        .appointment-card {
-            background: #111;
-            border: 1px solid #333;
-            border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 10px;
-            font-size: 13px;
-        }
-
         .logout-btn {
             background: transparent;
             border: 1px solid var(--border-gold);
@@ -207,7 +277,14 @@
             border-radius: 6px;
             font-size: 12px;
             cursor: pointer;
-            float: right;
+            width: 100%;
+            margin-top: 10px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .logout-btn:hover {
+            background: rgba(212, 175, 55, 0.1);
         }
     </style>
 </head>
@@ -261,8 +338,7 @@
 
         <!-- KLIJENTSKI PANEL ZA ZAKAZIVANJE -->
         <div id="client-panel" class="hidden">
-            <button class="logout-btn" onclick="logout()">Odjavi se</button>
-            <div class="header" style="clear: both; padding-top: 10px;">
+            <div class="header">
                 <h1>Zakazivanje</h1>
                 <p>Izaberi slobodan termin</p>
             </div>
@@ -295,30 +371,49 @@
             </div>
 
             <button class="btn-gold" onclick="bookAppointment()">Potvrdi rezervaciju</button>
+            <button class="logout-btn" onclick="logout()">Odjavi se</button>
         </div>
 
         <!-- ADMIN PANEL (Samo za stefankovacevic310@gmail.com) -->
         <div id="admin-panel" class="hidden">
-            <button class="logout-btn" onclick="logout()">Odjavi se</button>
-            <span class="admin-badge">Admin Panel</span>
-            <div class="header" style="clear: both;">
-                <h1>Bojkela Salon</h1>
-                <p>Pregled svih zakazanih termina</p>
+            
+            <!-- GORNJI MENI: Telefon, Instagram, Adresa -->
+            <div class="admin-top-menu">
+                <span>📞 <a href="tel:0641234567">064/123-4567</a></span>
+                <span>📸 <a href="https://instagram.com" target="_blank">@bojkela_barber</a></span>
+                <span>📍 <a href="#">Beograd</a></span>
             </div>
 
-            <div style="margin-top: 20px;">
-                <label style="margin-bottom: 10px;">Današnje rezervacije klijenata:</label>
+            <!-- PORUKA DOBRODOŠLICE -->
+            <div class="welcome-box">
+                <h3>Dobro došao, gazda!</h3>
+                <p>Sistem radi besprekorno. Pregledaj današnje termine i obaveštenja u nastavku.</p>
+            </div>
+
+            <!-- OBAVEŠTENJA -->
+            <div class="notifications-box">
+                <strong>Obaveštenja sistema:</strong>
+                Nema novih sistemskih poruka. Svi klijenti su uspešno potvrdili dolaske za danas.
+            </div>
+
+            <!-- ISTAKNUTI TERMINI U SREDINI -->
+            <div class="featured-appointments">
+                <h2>Zakazani Termini</h2>
+                
                 <div class="appointment-card">
                     <strong>Marko Petrović</strong> (Šišanje + Brada)<br>
-                    <span style="color: var(--gold);">11:00 - 16. Nov 2026</span><br>
+                    <span style="color: var(--gold);">⏰ 11:00 — 16. Nov 2026</span><br>
                     <span style="color: var(--text-muted); font-size: 11px;">Tel: 064 123 4567</span>
                 </div>
+
                 <div class="appointment-card">
                     <strong>Stefan Jovanović</strong> (Muško šišanje)<br>
-                    <span style="color: var(--gold);">13:30 - 16. Nov 2026</span><br>
+                    <span style="color: var(--gold);">⏰ 13:30 — 16. Nov 2026</span><br>
                     <span style="color: var(--text-muted); font-size: 11px;">Tel: 063 987 6543</span>
                 </div>
             </div>
+
+            <button class="logout-btn" onclick="logout()">Odjavi se</button>
         </div>
 
     </div>
@@ -361,3 +456,19 @@
 
         function selectSlot(element) {
             if (element.classList.contains('booked')) return;
+            document.querySelectorAll('.slot').forEach(s => s.classList.remove('selected'));
+            element.classList.add('selected');
+        }
+
+        function bookAppointment() {
+            alert('Termin je uspešno zakazan!');
+            location.reload();
+        }
+
+        function logout() {
+            location.reload();
+        }
+    </script>
+
+</body>
+</html>
