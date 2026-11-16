@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bojkela Barber - Premium Rezervacija</title>
+    <title>Bojkela Barber - Premium Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -14,6 +14,8 @@
             --gold-hover: #e5c158;
             --text-light: #f5f5f5;
             --text-muted: #a0a0a0;
+            --danger: #e74c3c;
+            --success: #2ecc71;
         }
 
         * {
@@ -45,36 +47,36 @@
 
         .header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 24px;
         }
 
         .header h1 {
             font-family: 'Playfair Display', serif;
             color: var(--gold);
-            font-size: 28px;
+            font-size: 26px;
             letter-spacing: 2px;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             text-transform: uppercase;
         }
 
         .header p {
             color: var(--text-muted);
-            font-size: 13px;
+            font-size: 12px;
             letter-spacing: 1px;
             text-transform: uppercase;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
         label {
             display: block;
-            font-size: 12px;
+            font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 1px;
             color: var(--border-gold);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-weight: 600;
         }
 
@@ -95,20 +97,53 @@
             box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
         }
 
-        .section-title {
-            font-size: 13px;
+        .btn-gold {
+            width: 100%;
+            background: linear-gradient(135deg, #d4af37 0%, #aa8c2c 100%);
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            padding: 14px;
+            font-size: 14px;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: var(--border-gold);
-            margin: 24px 0 12px 0;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+            margin-top: 10px;
+        }
+
+        .btn-gold:hover {
+            opacity: 0.9;
+        }
+
+        .toggle-link {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .toggle-link a {
+            color: var(--gold);
+            text-decoration: none;
+            cursor: pointer;
             font-weight: 600;
+        }
+
+        .toggle-link a:hover {
+            text-decoration: underline;
+        }
+
+        .hidden {
+            display: none;
         }
 
         .slots-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 8px;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         .slot {
@@ -143,72 +178,186 @@
             text-decoration: line-through;
         }
 
-        .btn-submit {
-            width: 100%;
-            background: linear-gradient(135deg, #d4af37 0%, #aa8c2c 100%);
+        .admin-badge {
+            background: var(--gold);
             color: #000;
-            border: none;
-            border-radius: 8px;
-            padding: 14px;
-            font-size: 14px;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            cursor: pointer;
-            transition: opacity 0.2s ease;
+            display: inline-block;
+            margin-bottom: 15px;
         }
 
-        .btn-submit:hover {
-            opacity: 0.9;
+        .appointment-card {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        .logout-btn {
+            background: transparent;
+            border: 1px solid var(--border-gold);
+            color: var(--gold);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            float: right;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <div class="header">
-            <h1>Bojkela Barber</h1>
-            <p>Exclusive Hair & Beard Lounge</p>
+        
+        <!-- LOGIN / REGISTRACIJA EKRAN -->
+        <div id="auth-screen">
+            <div class="header">
+                <h1>Bojkela Barber</h1>
+                <p id="form-subtitle">Prijavi se na svoj nalog</p>
+            </div>
+
+            <!-- FORMA ZA PRIJAVU -->
+            <div id="login-form">
+                <div class="form-group">
+                    <label>Email adresa</label>
+                    <input type="email" id="login-email" placeholder="Unesi email...">
+                </div>
+                <div class="form-group">
+                    <label>Lozinka</label>
+                    <input type="password" id="login-password" placeholder="Unesi lozinku...">
+                </div>
+                <button class="btn-gold" onclick="handleLogin()">Prijavi se</button>
+                <div class="toggle-link">
+                    Nemaš nalog? <a onclick="toggleAuthMode()">Registruj se ovde</a>
+                </div>
+            </div>
+
+            <!-- FORMA ZA REGISTRACIJU -->
+            <div id="register-form" class="hidden">
+                <div class="form-group">
+                    <label>Ime i prezime</label>
+                    <input type="text" id="reg-name" placeholder="Unesi ime i prezime...">
+                </div>
+                <div class="form-group">
+                    <label>Email adresa</label>
+                    <input type="email" id="reg-email" placeholder="Unesi email...">
+                </div>
+                <div class="form-group">
+                    <label>Lozinka</label>
+                    <input type="password" id="reg-password" placeholder="Kreiraj lozinku...">
+                </div>
+                <button class="btn-gold" onclick="handleRegister()">Napravi nalog</button>
+                <div class="toggle-link">
+                    Već imaš nalog? <a onclick="toggleAuthMode()">Prijavi se</a>
+                </div>
+            </div>
         </div>
 
-        <div class="form-group">
-            <label>Ime</label>
-            <input type="text" placeholder="Unesi ime...">
+        <!-- KLIJENTSKI PANEL ZA ZAKAZIVANJE -->
+        <div id="client-panel" class="hidden">
+            <button class="logout-btn" onclick="logout()">Odjavi se</button>
+            <div class="header" style="clear: both; padding-top: 10px;">
+                <h1>Zakazivanje</h1>
+                <p>Izaberi slobodan termin</p>
+            </div>
+
+            <div class="form-group">
+                <label>Izaberi uslugu</label>
+                <select id="service-select">
+                    <option>Muško šišanje (1.200 RSD)</option>
+                    <option>Sređivanje brade (800 RSD)</option>
+                    <option>Šišanje + Brada (1.800 RSD)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Datum</label>
+                <input type="date" id="app-date" value="2026-11-16">
+            </div>
+
+            <label style="margin-bottom: 8px;">Dostupni termini</label>
+            <div class="slots-grid">
+                <div class="slot" onclick="selectSlot(this)">10:00</div>
+                <div class="slot" onclick="selectSlot(this)">10:30</div>
+                <div class="slot booked">11:00</div>
+                <div class="slot" onclick="selectSlot(this)">11:30</div>
+                <div class="slot" onclick="selectSlot(this)">12:00</div>
+                <div class="slot" onclick="selectSlot(this)">12:30</div>
+                <div class="slot" onclick="selectSlot(this)">13:00</div>
+                <div class="slot booked">13:30</div>
+                <div class="slot" onclick="selectSlot(this)">14:00</div>
+            </div>
+
+            <button class="btn-gold" onclick="bookAppointment()">Potvrdi rezervaciju</button>
         </div>
 
-        <div class="form-group">
-            <label>Prezime</label>
-            <input type="text" placeholder="Unesi prezime...">
+        <!-- ADMIN PANEL (Samo za stefankovacevic310@gmail.com) -->
+        <div id="admin-panel" class="hidden">
+            <button class="logout-btn" onclick="logout()">Odjavi se</button>
+            <span class="admin-badge">Admin Panel</span>
+            <div class="header" style="clear: both;">
+                <h1>Bojkela Salon</h1>
+                <p>Pregled svih zakazanih termina</p>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <label style="margin-bottom: 10px;">Današnje rezervacije klijenata:</label>
+                <div class="appointment-card">
+                    <strong>Marko Petrović</strong> (Šišanje + Brada)<br>
+                    <span style="color: var(--gold);">11:00 - 16. Nov 2026</span><br>
+                    <span style="color: var(--text-muted); font-size: 11px;">Tel: 064 123 4567</span>
+                </div>
+                <div class="appointment-card">
+                    <strong>Stefan Jovanović</strong> (Muško šišanje)<br>
+                    <span style="color: var(--gold);">13:30 - 16. Nov 2026</span><br>
+                    <span style="color: var(--text-muted); font-size: 11px;">Tel: 063 987 6543</span>
+                </div>
+            </div>
         </div>
 
-        <div class="form-group">
-            <label>Broj telefona</label>
-            <input type="text" placeholder="npr. 0641234567">
-        </div>
-
-        <div class="form-group">
-            <label>Izaberi datum</label>
-            <input type="date" value="2026-11-16">
-        </div>
-
-        <div class="section-title">Dostupni termini</div>
-        <div class="slots-grid">
-            <div class="slot">10:00</div>
-            <div class="slot">10:30</div>
-            <div class="slot booked">11:00</div>
-            <div class="slot selected">11:30</div>
-            <div class="slot">12:00</div>
-            <div class="slot">12:30</div>
-            <div class="slot">13:00</div>
-            <div class="slot">13:30</div>
-            <div class="slot">14:00</div>
-            <div class="slot booked">14:30</div>
-            <div class="slot">15:00</div>
-            <div class="slot">15:30</div>
-        </div>
-
-        <button class="btn-submit">Potvrdi zakazivanje</button>
     </div>
 
-</body>
-</html>
+    <script>
+        let isRegisterMode = false;
+
+        function toggleAuthMode() {
+            isRegisterMode = !isRegisterMode;
+            document.getElementById('login-form').classList.toggle('hidden');
+            document.getElementById('register-form').classList.toggle('hidden');
+            document.getElementById('form-subtitle').innerText = isRegisterMode ? 'Kreiraj novi nalog' : 'Prijavi se na svoj nalog';
+        }
+
+        function handleLogin() {
+            const email = document.getElementById('login-email').value.trim();
+            const pass = document.getElementById('login-password').value;
+
+            if (email === 'stefankovacevic310@gmail.com' && pass === 'bojkelabarber123') {
+                document.getElementById('auth-screen').classList.add('hidden');
+                document.getElementById('admin-panel').classList.remove('hidden');
+            } else if (email !== '') {
+                document.getElementById('auth-screen').classList.add('hidden');
+                document.getElementById('client-panel').classList.remove('hidden');
+            } else {
+                alert('Molimo unesite email i lozinku.');
+            }
+        }
+
+        function handleRegister() {
+            const name = document.getElementById('reg-name').value;
+            const email = document.getElementById('reg-email').value;
+            if(name && email) {
+                alert('Uspešno kreiran nalog! Možete se prijaviti.');
+                toggleAuthMode();
+            } else {
+                alert('Popunite sva polja.');
+            }
+        }
+
+        function selectSlot(element) {
+            if (element.classList.contains('booked')) return;
