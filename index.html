@@ -177,10 +177,10 @@
         }
 
         .hidden {
-            display: none;
+            display: none !important;
         }
 
-        /* ADMIN MENI SA INTERAKTIVNIM DUGMIĆIMA */
+        /* ADMIN MENI SA INTERAKTIVNIM DUGMIĆIMA ZA UNUTRAŠNJI PRIKAZ */
         .admin-top-menu {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -204,6 +204,7 @@
             flex-direction: column;
             align-items: center;
             gap: 2px;
+            cursor: pointer;
         }
 
         .menu-btn:hover {
@@ -249,7 +250,6 @@
             font-size: 10px;
         }
 
-        /* ISTAKNUTI TERMINI U SREDINI */
         .featured-appointments {
             background: #121212;
             border: 1px solid var(--border-gold);
@@ -336,38 +336,52 @@
             background: rgba(212, 175, 55, 0.1);
         }
 
-        /* MODAL (PROZOR) ZA LOKACIJU */
-        .modal {
-            display: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.85);
-            z-index: 200;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            border-radius: 38px;
+        /* SEKCIJE KOJE SE MENJAJU UNUTAR APLIKACIJE (BEZ OTVARANJA NOVIH TABOVA) */
+        .app-view {
+            animation: fadeIn 0.3s ease;
         }
-        .modal-content {
-            background: #161616;
-            border: 1px solid var(--gold);
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-            width: 100%;
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .modal-content h3 {
+
+        .back-nav-btn {
+            background: #141414;
+            border: 1px solid #333;
             color: var(--gold);
-            margin-bottom: 10px;
-            font-family: 'Playfair Display', serif;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            cursor: pointer;
+            margin-bottom: 14px;
+            text-transform: uppercase;
+            font-weight: 600;
         }
-        .modal-content p {
+        .back-nav-btn:hover {
+            border-color: var(--gold);
+        }
+
+        .view-content-box {
+            background: #121212;
+            border: 1px solid var(--border-gold);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 14px;
+        }
+
+        .view-content-box h3 {
+            color: var(--gold);
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .view-content-box p {
             color: var(--text-muted);
             font-size: 12px;
-            margin-bottom: 15px;
+            line-height: 1.5;
         }
     </style>
 </head>
@@ -382,7 +396,7 @@
         <div class="iphone-screen">
             
             <!-- LOGIN / REGISTRACIJA EKRAN -->
-            <div id="auth-screen">
+            <div id="auth-screen" class="app-view">
                 <div class="header">
                     <h1>Bojkela Barber</h1>
                     <p id="form-subtitle">Prijavi se na svoj nalog</p>
@@ -425,8 +439,8 @@
                 </div>
             </div>
 
-            <!-- KLIJENTSki PANEL -->
-            <div id="client-panel" class="hidden">
+            <!-- KLIJENTSKI PANEL -->
+            <div id="client-panel" class="app-view hidden">
                 <div class="header">
                     <h1>Zakazivanje</h1>
                     <p>Izaberi slobodan termin</p>
@@ -463,23 +477,20 @@
                 <button class="logout-btn" onclick="logout()">Odjavi se</button>
             </div>
 
-            <!-- ADMIN PANEL -->
-            <div id="admin-panel" class="hidden">
+            <!-- ADMIN PANEL (GLAVNI EKRAN) -->
+            <div id="admin-panel" class="app-view hidden">
                 
-                <!-- GORNJI INTERAKTIVNI MENI -->
+                <!-- GORNJI MENI - DUGMIĆI VODE NA UNUTRAŠNJE PRIKAZE U APLIKACIJI -->
                 <div class="admin-top-menu">
-                    <!-- Telefon: otvara poziv -->
-                    <a href="tel:0641234567" class="menu-btn">
+                    <div class="menu-btn" onclick="showSubView('phone-view')">
                         <span>📞 Poziv</span>
-                    </a>
-                    <!-- Instagram: otvara novi prozor (tab) -->
-                    <a href="https://instagram.com" target="_blank" class="menu-btn">
+                    </div>
+                    <div class="menu-btn" onclick="showSubView('instagram-view')">
                         <span>📸 Instagram</span>
-                    </a>
-                    <!-- Lokacija: otvara aplikacijski prozor (modal) -->
-                    <a href="javascript:void(0)" onclick="openLocationModal()" class="menu-btn">
+                    </div>
+                    <div class="menu-btn" onclick="showSubView('location-view')">
                         <span>📍 Lokacija</span>
-                    </a>
+                    </div>
                 </div>
 
                 <!-- PORUKA DOBRODOŠLICE -->
@@ -514,17 +525,39 @@
                 <button class="logout-btn" onclick="logout()">Odjavi se</button>
             </div>
 
-        </div>
-
-        <!-- MODAL PROZOR ZA LOKACIJU -->
-        <div id="location-modal" class="modal">
-            <div class="modal-content">
-                <h3>Lokacija Salona</h3>
-                <p>📍 Bojkela Barber<br>Beograd, Srbija</p>
-                <button class="btn-gold" onclick="closeLocationModal()">Zatvori</button>
+            <!-- UNUTRAŠNJI PRIKAZ: POZIV -->
+            <div id="phone-view" class="app-view hidden">
+                <button class="back-nav-btn" onclick="showSubView('admin-main')">← Nazad</button>
+                <div class="view-content-box">
+                    <h3>Kontakt Telefon</h3>
+                    <p>Pozovite salon direktno:</p>
+                    <p style="color: var(--gold); font-size: 16px; font-weight: 700; margin-top: 10px;">+381 64 123 4567</p>
+                </div>
             </div>
-        </div>
 
+            <!-- UNUTRAŠNJI PRIKAZ: INSTAGRAM -->
+            <div id="instagram-view" class="app-view hidden">
+                <button class="back-nav-btn" onclick="showSubView('admin-main')">← Nazad</button>
+                <div class="view-content-box">
+                    <h3>Instagram Profil</h3>
+                    <p>Zvanična stranica salona:</p>
+                    <p style="color: var(--gold); font-size: 15px; font-weight: 600; margin-top: 10px;">@bojkela_barber</p>
+                    <p style="font-size: 11px; margin-top: 8px;">Pogledajte najnovije frizure i stilove u našoj galeriji radova.</p>
+                </div>
+            </div>
+
+            <!-- UNUTRAŠNJI PRIKAZ: LOKACIJA -->
+            <div id="location-view" class="app-view hidden">
+                <button class="back-nav-btn" onclick="showSubView('admin-main')">← Nazad</button>
+                <div class="view-content-box">
+                    <h3>Lokacija Salona</h3>
+                    <p style="color: var(--gold); font-size: 14px; font-weight: 600; margin-bottom: 5px;">Bojkela Barber</p>
+                    <p>Beograd, Srbija</p>
+                    <p style="font-size: 11px; margin-top: 8px;">Radno vreme: Pon - Sat: 09:00 - 20:00</p>
+                </div>
+            </div>
+
+        </div>
     </div>
 
     <script>
@@ -578,12 +611,27 @@
             location.reload();
         }
 
-        function openLocationModal() {
-            document.getElementById('location-modal').style.display = 'flex';
-        }
+        // Funkcija za glatko prebacivanje između ekrana u admin panelu
+        function showSubView(viewId) {
+            // Sakrij sve elemente unutar admin panela
+            document.querySelector('.admin-top-menu').classList.add('hidden');
+            document.querySelector('.welcome-box').classList.add('hidden');
+            document.querySelector('.notifications-box').classList.add('hidden');
+            document.querySelector('.featured-appointments').classList.add('hidden');
+            document.getElementById('phone-view').classList.add('hidden');
+            document.getElementById('instagram-view').classList.add('hidden');
+            document.getElementById('location-view').classList.add('hidden');
 
-        function closeLocationModal() {
-            document.getElementById('location-modal').style.display = 'none';
+            if (viewId === 'admin-main') {
+                // Vrati glavni admin meni
+                document.querySelector('.admin-top-menu').classList.remove('hidden');
+                document.querySelector('.welcome-box').classList.remove('hidden');
+                document.querySelector('.notifications-box').classList.remove('hidden');
+                document.querySelector('.featured-appointments').classList.remove('hidden');
+            } else {
+                // Prikaži željeni pod-prozor
+                document.getElementById(viewId).classList.remove('hidden');
+            }
         }
     </script>
 
