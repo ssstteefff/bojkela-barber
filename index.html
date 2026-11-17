@@ -299,23 +299,49 @@
                 <!-- Dinamički sadržaj -->
             </div>
         </div>
+
+        <!-- SEKCIJA: KONTAKT -->
+        <div id="kontakt-view" class="hidden" style="text-align: center; padding-top: 40px;">
+            <div class="card">
+                <h3>Kontakt</h3>
+                <p style="font-size: 1.1rem; color: #fff; font-weight: bold; margin-top: 10px;">Đorđe Bojić</p>
+                <p style="margin-top: 6px;"><a href="tel:0695415588" class="phone-link" style="font-size: 1.1rem;">0695415588</a></p>
+            </div>
+        </div>
+
+        <!-- SEKCIJA: INSTAGRAM -->
+        <div id="instagram-view" class="hidden" style="text-align: center; padding-top: 40px;">
+            <div class="card">
+                <h3>Instagram</h3>
+                <p style="margin-top: 10px;"><a href="https://instagram.com/bojkela_barber" target="_blank" class="phone-link" style="font-size: 1.1rem;">@bojkela_barber</a></p>
+            </div>
+        </div>
+
+        <!-- SEKCIJA: LOKACIJA -->
+        <div id="lokacija-view" class="hidden" style="text-align: center; padding-top: 40px;">
+            <div class="card">
+                <h3>Lokacija</h3>
+                <p style="font-size: 1.05rem; color: #fff; margin-top: 10px;">Braće Savić 3b, Batajnica</p>
+            </div>
+        </div>
+
     </div>
 
-    <!-- DONJA NAVIGACIJA SA FENSI SVG LINIJAMA BEZ BOJE -->
+    <!-- DONJA NAVIGACIJA -->
     <div class="bottom-nav" id="bottom-nav" style="display: none;">
-        <div class="nav-item active">
+        <div class="nav-item active" id="nav-termini" onclick="switchTab('termini')">
             <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
             <span>TERMINI</span>
         </div>
-        <div class="nav-item">
+        <div class="nav-item" id="nav-kontakt" onclick="switchTab('kontakt')">
             <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-            <span>POZIV</span>
+            <span>KONTAKT</span>
         </div>
-        <div class="nav-item">
+        <div class="nav-item" id="nav-instagram" onclick="switchTab('instagram')">
             <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
             <span>INSTAGRAM</span>
         </div>
-        <div class="nav-item">
+        <div class="nav-item" id="nav-lokacija" onclick="switchTab('lokacija')">
             <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
             <span>LOKACIJA</span>
         </div>
@@ -338,11 +364,13 @@
         if (email === 'admin' && pass === 'admin') {
             currentUser = 'admin';
             showScreen('admin-view');
-            renderAdminAppointments();
+            document.getElementById('bottom-nav').style.display = 'flex';
+            setActiveNav('termini');
         } else if (email === 'stefan' && pass === '123') {
             currentUser = 'stefan';
             showScreen('client-view');
-            renderClientAppointments();
+            document.getElementById('bottom-nav').style.display = 'flex';
+            setActiveNav('termini');
         } else {
             alert('Pogrešan email ili šifra! Koristite stefan / 123 za klijenta ili admin / admin za admina.');
         }
@@ -360,11 +388,40 @@
         document.getElementById('login-view').classList.add('hidden');
         document.getElementById('admin-view').classList.add('hidden');
         document.getElementById('client-view').classList.add('hidden');
+        document.getElementById('kontakt-view').classList.add('hidden');
+        document.getElementById('instagram-view').classList.add('hidden');
+        document.getElementById('lokacija-view').classList.add('hidden');
         
         document.getElementById(screenId).classList.remove('hidden');
-        if (screenId !== 'login-view') {
-            document.getElementById('bottom-nav').style.display = 'flex';
+    }
+
+    function switchTab(tabName) {
+        if (!currentUser) return;
+
+        // Označi aktivnu ikonicu u navigaciji
+        setActiveNav(tabName);
+
+        if (tabName === 'termini') {
+            if (currentUser === 'admin') {
+                showScreen('admin-view');
+                renderAdminAppointments();
+            } else {
+                showScreen('client-view');
+                renderClientAppointments();
+            }
+        } else if (tabName === 'kontakt') {
+            showScreen('kontakt-view');
+        } else if (tabName === 'instagram') {
+            showScreen('instagram-view');
+        } else if (tabName === 'lokacija') {
+            showScreen('lokacija-view');
         }
+    }
+
+    function setActiveNav(tabName) {
+        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+        const activeItem = document.getElementById('nav-' + tabName);
+        if (activeItem) activeItem.classList.add('active');
     }
 
     function toggleDay(dateStr) {
@@ -384,7 +441,6 @@
             return;
         }
 
-        // Grupiši termine po danima
         const grouped = {};
         appointments.forEach(app => {
             if (!grouped[app.date]) {
@@ -393,7 +449,6 @@
             grouped[app.date].push(app);
         });
 
-        // Radni sati salona
         const workingHours = ["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
 
         let html = '';
