@@ -1,614 +1,885 @@
 <!DOCTYPE html>
 <html lang="sr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bojkela Barber - Mobile App</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-black: #080808;
-            --phone-frame: #1c1c1e;
-            --phone-screen: #0d0d0d;
-            --border-gold: #c5a059;
-            --gold: #d4af37;
-            --text-light: #f5f5f5;
-            --text-muted: #a0a0a0;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bojkela Barber - Mobile App</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-outer: #09090b;
+      --phone-body: #141417;
+      --phone-border: #2c2c32;
+      --screen-bg: #0f0f12;
+      --card-bg: #18181d;
+      --gold: #d4af37;
+      --gold-light: #f3d06b;
+      --gold-dark: #a68523;
+      --text-main: #f4f4f6;
+      --text-muted: #9ca3af;
+      --border-subtle: rgba(212, 175, 55, 0.22);
+      --danger: #ef4444;
+      --success: #22c55e;
+    }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
 
-        body {
-            background-color: var(--bg-black);
-            color: var(--text-light);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
+    body {
+      background: radial-gradient(circle at center, #18181f 0%, var(--bg-outer) 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      color: var(--text-main);
+    }
 
-        /* IPHONE 17 PRO OKVIR */
-        .iphone-frame {
-            width: 390px;
-            height: 800px;
-            background-color: var(--phone-frame);
-            border-radius: 50px;
-            padding: 14px;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 0 2px #333, inset 0 0 10px rgba(212, 175, 55, 0.2);
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
+    /* iPhone 17 Pro Frame */
+    .phone-frame {
+      width: 390px;
+      height: 820px;
+      background: var(--phone-body);
+      border-radius: 54px;
+      padding: 14px;
+      box-shadow:
+        0 0 0 2px #3a3a42,
+        0 30px 70px rgba(0, 0, 0, 0.85),
+        0 0 40px rgba(212, 175, 55, 0.08);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
 
-        /* DYNAMIC ISLAND */
-        .dynamic-island {
-            width: 110px;
-            height: 28px;
-            background-color: #000;
-            border-radius: 20px;
-            position: absolute;
-            top: 22px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 100;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            padding-right: 10px;
-        }
+    /* Dynamic Island */
+    .dynamic-island {
+      width: 118px;
+      height: 32px;
+      background: #000;
+      border-radius: 20px;
+      position: absolute;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.6);
+    }
 
-        .camera-dot {
-            width: 10px;
-            height: 10px;
-            background-color: #111;
-            border-radius: 50%;
-            border: 1px solid #222;
-        }
+    .camera-lens {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #1e293b 30%, #090d16 70%);
+      border: 1px solid #27272a;
+    }
 
-        /* EKRAN TELEFONA */
-        .iphone-screen {
-            background-color: var(--phone-screen);
-            width: 100%;
-            height: 100%;
-            border-radius: 38px;
-            overflow-y: auto;
-            padding: 45px 20px 25px 20px;
-            position: relative;
-        }
+    /* 3D Flip Container */
+    .screen-viewport {
+      width: 100%;
+      height: 100%;
+      border-radius: 42px;
+      overflow: hidden;
+      perspective: 1600px;
+      background: var(--screen-bg);
+      position: relative;
+    }
 
-        .iphone-screen::-webkit-scrollbar {
-            display: none;
-        }
+    .flip-card-inner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.85s cubic-bezier(0.34, 1.35, 0.64, 1);
+    }
 
-        .header {
-            text-align: center;
-            margin-bottom: 16px;
-        }
+    .flip-card-inner.is-flipped {
+      transform: rotateY(180deg);
+    }
 
-        .header h1 {
-            font-family: 'Playfair Display', serif;
-            color: var(--gold);
-            font-size: 20px;
-            letter-spacing: 2px;
-            margin-bottom: 2px;
-            text-transform: uppercase;
-        }
+    .screen-face {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      background: var(--screen-bg);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
 
-        .header p {
-            color: var(--text-muted);
-            font-size: 10px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
+    /* Front Face: Auth (Login / Register) */
+    .face-front {
+      padding: 78px 26px 30px;
+      justify-content: flex-start;
+      z-index: 2;
+    }
 
-        .form-group {
-            margin-bottom: 12px;
-        }
+    /* Back Face: Main App */
+    .face-back {
+      transform: rotateY(180deg);
+      padding-top: 64px;
+      justify-content: space-between;
+    }
 
-        label {
-            display: block;
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--border-gold);
-            margin-bottom: 4px;
-            font-weight: 600;
-        }
+    /* Brand Typography */
+    .brand-title {
+      font-family: 'Cinzel', serif;
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-align: center;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold), var(--gold-dark));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
 
-        input, select {
-            width: 100%;
-            background-color: #121212;
-            border: 1px solid #333;
-            border-radius: 8px;
-            padding: 10px 14px;
-            color: var(--text-light);
-            font-size: 13px;
-            transition: all 0.3s ease;
-        }
+    .brand-subtitle {
+      font-size: 11px;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 34px;
+    }
 
-        input:focus, select:focus {
-            outline: none;
-            border-color: var(--gold);
-            box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
-        }
+    /* Form Controls */
+    .form-group {
+      margin-bottom: 18px;
+    }
 
-        .btn-gold {
-            width: 100%;
-            background: linear-gradient(135deg, #d4af37 0%, #aa8c2c 100%);
-            color: #000;
-            border: none;
-            border-radius: 8px;
-            padding: 12px;
-            font-size: 13px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            cursor: pointer;
-            transition: opacity 0.2s ease;
-            margin-top: 8px;
-        }
+    .form-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 7px;
+    }
 
-        .btn-gold:hover {
-            opacity: 0.9;
-        }
+    .form-input, .form-select {
+      width: 100%;
+      padding: 13px 15px;
+      background: var(--card-bg);
+      border: 1px solid #2a2a32;
+      border-radius: 12px;
+      color: var(--text-main);
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
 
-        .toggle-link {
-            text-align: center;
-            margin-top: 14px;
-            font-size: 12px;
-            color: var(--text-muted);
-        }
+    .form-input:focus, .form-select:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.14);
+    }
 
-        .toggle-link a {
-            color: var(--gold);
-            text-decoration: none;
-            cursor: pointer;
-            font-weight: 600;
-        }
+    .btn-gold {
+      width: 100%;
+      padding: 14px;
+      margin-top: 8px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 55%, var(--gold-dark) 100%);
+      color: #111;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: transform 0.15s, filter 0.2s;
+    }
 
-        .toggle-link a:hover {
-            text-decoration: underline;
-        }
+    .btn-gold:active {
+      transform: scale(0.98);
+    }
 
-        .hidden {
-            display: none !important;
-        }
+    .btn-gold:hover {
+      filter: brightness(1.06);
+    }
 
-        /* GORNJI MENI BEZ EMODŽIJA */
-        .admin-top-menu {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 6px;
-            margin-bottom: 12px;
-        }
+    .auth-switch {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
 
-        .menu-btn {
-            background: #141414;
-            border: 1px solid #333;
-            border-radius: 8px;
-            padding: 10px 4px;
-            text-align: center;
-            color: var(--gold);
-            font-size: 10px;
-            text-transform: uppercase;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
+    .auth-switch span {
+      color: var(--gold);
+      font-weight: 600;
+      cursor: pointer;
+    }
 
-        .menu-btn:hover {
-            border-color: var(--gold);
-            background: rgba(212, 175, 55, 0.05);
-        }
+    .error-msg {
+      color: var(--danger);
+      font-size: 12px;
+      text-align: center;
+      margin-top: 12px;
+      min-height: 18px;
+    }
 
-        .welcome-box {
-            background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(20, 20, 20, 0.8) 100%);
-            border-left: 3px solid var(--gold);
-            padding: 8px 10px;
-            border-radius: 6px;
-            margin-bottom: 10px;
-        }
+    /* App Header */
+    .app-header {
+      padding: 8px 22px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #1f1f26;
+    }
 
-        .welcome-box h3 {
-            color: var(--gold);
-            font-size: 12px;
-            margin-bottom: 2px;
-            font-family: 'Playfair Display', serif;
-        }
+    .app-header-title {
+      font-family: 'Cinzel', serif;
+      font-size: 17px;
+      color: var(--gold);
+      letter-spacing: 1.2px;
+    }
 
-        .welcome-box p {
-            color: var(--text-muted);
-            font-size: 10px;
-        }
+    .logout-btn {
+      background: transparent;
+      border: 1px solid #32323c;
+      color: var(--text-muted);
+      font-size: 11px;
+      padding: 6px 11px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
 
-        /* OBAVEŠTENJA I TERMINI JEDNI DO DRUGIH (KOMPAKTNO U SREDINI) */
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
+    .logout-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
 
-        .dashboard-box {
-            background: #121212;
-            border: 1px solid #333;
-            border-radius: 8px;
-            padding: 10px;
-            font-size: 11px;
-        }
+    /* Scrollable App Content */
+    .app-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 18px 22px;
+    }
 
-        .dashboard-box h4 {
-            color: var(--gold);
-            font-size: 10px;
-            text-transform: uppercase;
-            margin-bottom: 6px;
-            border-bottom: 1px solid #222;
-            padding-bottom: 3px;
-            font-weight: 600;
-        }
+    .app-content::-webkit-scrollbar {
+      width: 4px;
+    }
+    .app-content::-webkit-scrollbar-thumb {
+      background: #2c2c35;
+      border-radius: 4px;
+    }
 
-        .mini-appointment {
-            background: #090909;
-            border: 1px solid #222;
-            border-left: 2px solid var(--gold);
-            padding: 6px;
-            border-radius: 4px;
-            margin-bottom: 6px;
-            font-size: 10px;
-        }
+    .welcome-banner {
+      background: linear-gradient(145deg, #1b1b22, #131318);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 18px;
+    }
 
-        .mini-appointment:last-child {
-            margin-bottom: 0;
-        }
+    .welcome-banner h3 {
+      font-size: 15px;
+      color: var(--gold-light);
+      margin-bottom: 4px;
+    }
 
-        .slots-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 6px;
-            margin-bottom: 14px;
-        }
+    .welcome-banner p {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
 
-        .slot {
-            background: #121212;
-            border: 1px solid #333;
-            border-radius: 6px;
-            padding: 8px;
-            text-align: center;
-            font-size: 12px;
-            color: var(--text-light);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
+    /* Cards & Lists */
+    .section-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--gold);
+      margin: 16px 0 10px;
+      font-weight: 600;
+    }
 
-        .slot:hover:not(.booked) {
-            border-color: var(--gold);
-            color: var(--gold);
-        }
+    .service-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
 
-        .slot.selected {
-            background: var(--gold);
-            color: #000;
-            font-weight: 600;
-            border-color: var(--gold);
-        }
+    .service-card {
+      background: var(--card-bg);
+      border: 1px solid #26262e;
+      border-radius: 12px;
+      padding: 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
 
-        .slot.booked {
-            background: #111;
-            color: #444;
-            border-color: #222;
-            cursor: not-allowed;
-            text-decoration: line-through;
-        }
+    .service-card.selected {
+      border-color: var(--gold);
+      background: rgba(212, 175, 55, 0.08);
+    }
 
-        .logout-btn {
-            background: transparent;
-            border: 1px solid var(--border-gold);
-            color: var(--gold);
-            padding: 8px;
-            border-radius: 6px;
-            font-size: 11px;
-            cursor: pointer;
-            width: 100%;
-            text-transform: uppercase;
-            font-weight: 600;
-        }
+    .service-name {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
 
-        .logout-btn:hover {
-            background: rgba(212, 175, 55, 0.1);
-        }
+    .service-price {
+      font-size: 12px;
+      color: var(--gold);
+      font-weight: 600;
+    }
 
-        /* UNUTRAŠNJI PRIKAZI (SAMO DUGME NAZAD, BEZ ODJAVI SE) */
-        .app-view {
-            animation: fadeIn 0.3s ease;
-        }
+    .time-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(4px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+    .time-slot {
+      background: var(--card-bg);
+      border: 1px solid #26262e;
+      border-radius: 10px;
+      padding: 9px 6px;
+      text-align: center;
+      font-size: 12px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
 
-        .back-nav-btn {
-            background: #141414;
-            border: 1px solid #333;
-            color: var(--gold);
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 11px;
-            cursor: pointer;
-            margin-bottom: 16px;
-            text-transform: uppercase;
-            font-weight: 600;
-        }
-        .back-nav-btn:hover {
-            border-color: var(--gold);
-        }
+    .time-slot.selected {
+      background: var(--gold);
+      color: #111;
+      font-weight: 700;
+      border-color: var(--gold);
+    }
 
-        .view-content-box {
-            background: #121212;
-            border: 1px solid var(--border-gold);
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            margin-top: 10px;
-        }
+    .booking-item {
+      background: var(--card-bg);
+      border: 1px solid #26262e;
+      border-left: 3px solid var(--gold);
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-        .view-content-box h3 {
-            color: var(--gold);
-            font-family: 'Playfair Display', serif;
-            margin-bottom: 10px;
-            font-size: 16px;
-        }
+    .booking-info h4 {
+      font-size: 13px;
+      margin-bottom: 3px;
+    }
 
-        .view-content-box p {
-            color: var(--text-muted);
-            font-size: 12px;
-            line-height: 1.5;
-        }
-    </style>
+    .booking-info p {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .btn-cancel {
+      background: rgba(239, 68, 68, 0.12);
+      color: var(--danger);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      padding: 5px 9px;
+      border-radius: 7px;
+      font-size: 11px;
+      cursor: pointer;
+    }
+
+    /* Info Sub-views (Poziv, Instagram, Lokacija) */
+    .info-box {
+      background: var(--card-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+
+    .info-box h4 {
+      color: var(--gold);
+      font-size: 14px;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .info-box p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .info-highlight {
+      color: var(--text-main);
+      font-weight: 600;
+      margin-top: 8px;
+      display: block;
+    }
+
+    /* Bottom Navigation (No Emojis) */
+    .bottom-nav {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      background: #131317;
+      border-top: 1px solid #222229;
+      padding: 12px 10px 22px;
+    }
+
+    .nav-item {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      padding: 6px 4px;
+      transition: color 0.2s;
+      position: relative;
+    }
+
+    .nav-item.active {
+      color: var(--gold);
+    }
+
+    .nav-item.active::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 25%;
+      width: 50%;
+      height: 2px;
+      background: var(--gold);
+      border-radius: 2px;
+    }
+
+    .toast {
+      position: absolute;
+      top: 72px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      background: var(--gold);
+      color: #111;
+      padding: 9px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s ease;
+      z-index: 100;
+      white-space: nowrap;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
 </head>
 <body>
 
-    <!-- OKVIR IPHONE 17 PRO -->
-    <div class="iphone-frame">
-        <div class="dynamic-island">
-            <div class="camera-dot"></div>
-        </div>
-
-        <div class="iphone-screen">
-            
-            <!-- LOGIN / REGISTRACIJA EKRAN -->
-            <div id="auth-screen" class="app-view">
-                <div class="header">
-                    <h1>Bojkela Barber</h1>
-                    <p id="form-subtitle">Prijavi se na svoj nalog</p>
-                </div>
-
-                <!-- FORMA ZA PRIJAVU -->
-                <div id="login-form">
-                    <div class="form-group">
-                        <label>Email adresa</label>
-                        <input type="email" id="login-email" placeholder="Unesi email...">
-                    </div>
-                    <div class="form-group">
-                        <label>Lozinka</label>
-                        <input type="password" id="login-password" placeholder="Unesi lozinku...">
-                    </div>
-                    <button class="btn-gold" onclick="handleLogin()">Prijavi se</button>
-                    <div class="toggle-link">
-                        Nemaš nalog? <a onclick="toggleAuthMode()">Registruj se ovde</a>
-                    </div>
-                </div>
-
-                <!-- FORMA ZA REGISTRACIJU -->
-                <div id="register-form" class="hidden">
-                    <div class="form-group">
-                        <label>Ime i prezime</label>
-                        <input type="text" id="reg-name" placeholder="Unesi ime i prezime...">
-                    </div>
-                    <div class="form-group">
-                        <label>Email adresa</label>
-                        <input type="email" id="reg-email" placeholder="Unesi email...">
-                    </div>
-                    <div class="form-group">
-                        <label>Lozinka</label>
-                        <input type="password" id="reg-password" placeholder="Kreiraj lozinku...">
-                    </div>
-                    <button class="btn-gold" onclick="handleRegister()">Napravi nalog</button>
-                    <div class="toggle-link">
-                        Već imaš nalog? <a onclick="toggleAuthMode()">Prijavi se</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- KLIJENTSKI PANEL -->
-            <div id="client-panel" class="app-view hidden">
-                <div class="header">
-                    <h1>Zakazivanje</h1>
-                    <p>Izaberi slobodan termin</p>
-                </div>
-
-                <div class="form-group">
-                    <label>Izaberi uslugu</label>
-                    <select id="service-select">
-                        <option>Muško šišanje (1.200 RSD)</option>
-                        <option>Sređivanje brade (800 RSD)</option>
-                        <option>Šišanje + Brada (1.800 RSD)</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Datum</label>
-                    <input type="date" id="app-date" value="2026-11-16">
-                </div>
-
-                <label style="margin-bottom: 6px;">Dostupni termini</label>
-                <div class="slots-grid">
-                    <div class="slot" onclick="selectSlot(this)">10:00</div>
-                    <div class="slot" onclick="selectSlot(this)">10:30</div>
-                    <div class="slot booked">11:00</div>
-                    <div class="slot" onclick="selectSlot(this)">11:30</div>
-                    <div class="slot" onclick="selectSlot(this)">12:00</div>
-                    <div class="slot" onclick="selectSlot(this)">12:30</div>
-                    <div class="slot" onclick="selectSlot(this)">13:00</div>
-                    <div class="slot booked">13:30</div>
-                    <div class="slot" onclick="selectSlot(this)">14:00</div>
-                </div>
-
-                <button class="btn-gold" onclick="bookAppointment()">Potvrdi rezervaciju</button>
-                <button class="logout-btn" onclick="logout()" style="margin-top: 10px;">Odjavi se</button>
-            </div>
-
-            <!-- ADMIN PANEL (GLAVNI EKRAN) -->
-            <div id="admin-panel" class="app-view hidden">
-                
-                <!-- GORNJI MENI - BEZ EMODŽIJA -->
-                <div class="admin-top-menu">
-                    <div class="menu-btn" onclick="showSubView('phone-view')">Poziv</div>
-                    <div class="menu-btn" onclick="showSubView('instagram-view')">Instagram</div>
-                    <div class="menu-btn" onclick="showSubView('location-view')">Lokacija</div>
-                </div>
-
-                <!-- PORUKA DOBRODOŠLICE -->
-                <div class="welcome-box">
-                    <h3>Dobro došao, gazda!</h3>
-                    <p>Sistem radi besprekorno.</p>
-                </div>
-
-                <!-- OBAVEŠTENJA I TERMINI JEDNI DO DRUGIH -->
-                <div class="dashboard-grid">
-                    <div class="dashboard-box">
-                        <h4>Obaveštenja</h4>
-                        <p style="color: var(--text-muted); font-size: 10px; line-height: 1.3;">Svi klijenti su uspešno potvrdili termine za danas.</p>
-                    </div>
-
-                    <div class="dashboard-box">
-                        <h4>Termini</h4>
-                        <div class="mini-appointment">
-                            <strong style="color:var(--text-light)">Marko P.</strong><br>
-                            <span style="color: var(--gold);">11:00 (Šišanje)</span>
-                        </div>
-                        <div class="mini-appointment">
-                            <strong style="color:var(--text-light)">Stefan J.</strong><br>
-                            <span style="color: var(--gold);">13:30 (Brada)</span>
-                        </div>
-                    </div>
-                </div>
-
-                <button class="logout-btn" onclick="logout()">Odjavi se</button>
-            </div>
-
-            <!-- UNUTRAŠNJI PRIKAZ: POZIV (SAMO NAZAD DUGME) -->
-            <div id="phone-view" class="app-view hidden">
-                <button class="back-nav-btn" onclick="showSubView('admin-main')">← Nazad</button>
-                <div class="view-content-box">
-                    <h3>Kontakt Telefon</h3>
-                    <p>Pozovite salon direktno:</p>
-                    <p style="color: var(--gold); font-size: 16px; font-weight: 700; margin-top: 10px;">+381 64 123 4567</p>
-                </div>
-            </div>
-
-            <!-- UNUTRAŠNJI PRIKAZ: INSTAGRAM (SAMO NAZAD DUGME) -->
-            <div id="instagram-view" class="app-view hidden">
-                <button class="back-nav-btn" onclick="showSubView('admin-main')">← Nazad</button>
-                <div class="view-content-box">
-                    <h3>Instagram Profil</h3>
-                    <p>Zvanična stranica salona:</p>
-                    <p style="color: var(--gold); font-size: 15px; font-weight: 600; margin-top: 10px;">@bojkela_barber</p>
-                    <p style="font-size: 11px; margin-top: 8px;">Pogledajte najnovije frizure i stilove u našoj galeriji radova.</p>
-                </div>
-            </div>
-
-            <!-- UNUTRAŠNJI PRIKAZ: LOKACIJA (SAMO NAZAD DUGME) -->
-            <div id="location-view" class="app-view hidden">
-                <button class="back-nav-btn" onclick="showSubView('admin-main')">← Nazad</button>
-                <div class="view-content-box">
-                    <h3>Lokacija Salona</h3>
-                    <p style="color: var(--gold); font-size: 14px; font-weight: 600; margin-bottom: 5px;">Bojkela Barber</p>
-                    <p>Beograd, Srbija</p>
-                    <p style="font-size: 11px; margin-top: 8px;">Radno vreme: Pon - Sat: 09:00 - 20:00</p>
-                </div>
-            </div>
-
-        </div>
+  <div class="phone-frame">
+    <div class="dynamic-island">
+      <div class="camera-lens"></div>
     </div>
 
-    <script>
-        let isRegisterMode = false;
+    <div class="screen-viewport">
+      <div id="toast" class="toast">Termin je uspešno zakazan!</div>
 
-        function toggleAuthMode() {
-            isRegisterMode = !isRegisterMode;
-            document.getElementById('login-form').classList.toggle('hidden');
-            document.getElementById('register-form').classList.toggle('hidden');
-            document.getElementById('form-subtitle').innerText = isRegisterMode ? 'Kreiraj novi nalog' : 'Prijavi se na svoj nalog';
-        }
+      <!-- 3D FLIP CONTAINER -->
+      <div id="flipCard" class="flip-card-inner">
 
-        function handleLogin() {
-            const email = document.getElementById('login-email').value.trim();
-            const pass = document.getElementById('login-password').value;
+        <!-- PREDNJA STRANA: PRIJAVA / REGISTRACIJA -->
+        <div class="screen-face face-front">
+          <h1 class="brand-title">BOJKELA BARBER</h1>
+          <p id="authSubtitle" class="brand-subtitle">PRIJAVI SE NA SVOJ NALOG</p>
 
-            if (email === 'stefankovacevic310@gmail.com' && pass === 'bojkelabarber123') {
-                document.getElementById('auth-screen').classList.add('hidden');
-                document.getElementById('admin-panel').classList.remove('hidden');
-            } else if (email !== '') {
-                document.getElementById('auth-screen').classList.add('hidden');
-                document.getElementById('client-panel').classList.remove('hidden');
-            } else {
-                alert('Molimo unesite email i lozinku.');
-            }
-        }
+          <!-- Login Forma -->
+          <form id="loginForm">
+            <div class="form-group">
+              <label class="form-label">EMAIL ADRESA</label>
+              <input type="email" id="loginEmail" class="form-input" placeholder="Unesi email..." required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">LOZINKA</label>
+              <input type="password" id="loginPassword" class="form-input" placeholder="Unesi lozinku..." required />
+            </div>
+            <button type="submit" class="btn-gold">PRIJAVI SE</button>
+          </form>
 
-        function handleRegister() {
-            const name = document.getElementById('reg-name').value;
-            const email = document.getElementById('reg-email').value;
-            if(name && email) {
-                alert('Uspešno kreiran nalog! Možete se prijaviti.');
-                toggleAuthMode();
-            } else {
-                alert('Popunite sva polja.');
-            }
-        }
+          <!-- Registracija Forma -->
+          <form id="registerForm" class="hidden">
+            <div class="form-group">
+              <label class="form-label">IME I PREZIME</label>
+              <input type="text" id="regName" class="form-input" placeholder="Unesi ime..." required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">EMAIL ADRESA</label>
+              <input type="email" id="regEmail" class="form-input" placeholder="Unesi email..." required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">LOZINKA</label>
+              <input type="password" id="regPassword" class="form-input" placeholder="Kreiraj lozinku..." required />
+            </div>
+            <button type="submit" class="btn-gold">KREIRAJ NALOG</button>
+          </form>
 
-        function selectSlot(element) {
-            if (element.classList.contains('booked')) return;
-            document.querySelectorAll('.slot').forEach(s => s.classList.remove('selected'));
-            element.classList.add('selected');
-        }
+          <p id="authError" class="error-msg"></p>
 
-        function bookAppointment() {
-            alert('Termin je uspešno zakazan!');
-            location.reload();
-        }
+          <div class="auth-switch" id="switchToRegister">
+            Nemaš nalog? <span onclick="toggleAuthMode('register')">Registruj se ovde</span>
+          </div>
+          <div class="auth-switch hidden" id="switchToLogin">
+            Već imaš nalog? <span onclick="toggleAuthMode('login')">Prijavi se ovde</span>
+          </div>
+        </div>
 
-        function logout() {
-            location.reload();
-        }
+        <!-- ZADNJA STRANA: APLIKACIJA (OKREĆE SE NAKON PRIJAVE) -->
+        <div class="screen-face face-back">
+          <div class="app-header">
+            <span class="app-header-title">BOJKELA BARBER</span>
+            <button class="logout-btn" onclick="logoutUser()">Odjavi se</button>
+          </div>
 
-        function showSubView(viewId) {
-            document.querySelector('.admin-top-menu').classList.add('hidden');
-            document.querySelector('.welcome-box').classList.add('hidden');
-            document.querySelector('.dashboard-grid').classList.add('hidden');
-            document.querySelector('#admin-panel > .logout-btn').classList.add('hidden');
-            
-            document.getElementById('phone-view').classList.add('hidden');
-            document.getElementById('instagram-view').classList.add('hidden');
-            document.getElementById('location-view').classList.add('hidden');
+          <div class="app-content">
+            <!-- TAB 1: POČETNA (KLIJENT ILI ADMIN) -->
+            <div id="tab-home">
+              <!-- Klijentski prikaz -->
+              <div id="clientView">
+                <div class="welcome-banner">
+                  <h3 id="clientGreeting">Dobrodošao nazad</h3>
+                  <p>Izaberi uslugu i rezerviši svoj termin u par klikova.</p>
+                </div>
 
-            if (viewId === 'admin-main') {
-                document.querySelector('.admin-top-menu').classList.remove('hidden');
-                document.querySelector('.welcome-box').classList.remove('hidden');
-                document.querySelector('.dashboard-grid').classList.remove('hidden');
-                document.querySelector('#admin-panel > .logout-btn').classList.remove('hidden');
-            } else {
-                document.getElementById(viewId).classList.remove('hidden');
-            }
-        }
-    </script>
+                <div class="section-title">1. Izaberi uslugu</div>
+                <div class="service-grid" id="serviceGrid">
+                  <div class="service-card selected" data-service="Muško šišanje" data-price="1.200 RSD">
+                    <div class="service-name">Muško šišanje</div>
+                    <div class="service-price">1.200 RSD</div>
+                  </div>
+                  <div class="service-card" data-service="Šišanje + Brada" data-price="1.600 RSD">
+                    <div class="service-name">Šišanje + Brada</div>
+                    <div class="service-price">1.600 RSD</div>
+                  </div>
+                  <div class="service-card" data-service="Sređivanje brade" data-price="700 RSD">
+                    <div class="service-name">Sređivanje brade</div>
+                    <div class="service-price">700 RSD</div>
+                  </div>
+                  <div class="service-card" data-service="VIP Tretman" data-price="2.200 RSD">
+                    <div class="service-name">VIP Tretman</div>
+                    <div class="service-price">2.200 RSD</div>
+                  </div>
+                </div>
 
+                <div class="section-title">2. Datum i vreme</div>
+                <div class="form-group">
+                  <input type="date" id="bookingDate" class="form-input" />
+                </div>
+
+                <div class="time-grid" id="timeGrid">
+                  <div class="time-slot selected">10:00</div>
+                  <div class="time-slot">11:30</div>
+                  <div class="time-slot">13:00</div>
+                  <div class="time-slot">15:00</div>
+                  <div class="time-slot">17:00</div>
+                  <div class="time-slot">18:30</div>
+                </div>
+
+                <button class="btn-gold" onclick="bookAppointment()">POTVRDI TERMIN</button>
+
+                <div class="section-title">Tvoji zakazani termini</div>
+                <div id="clientBookingsList"></div>
+              </div>
+
+              <!-- Admin prikaz -->
+              <div id="adminView" class="hidden">
+                <div class="welcome-banner">
+                  <h3>Admin Kontrolna Tabla</h3>
+                  <p>Pregled svih aktivnih termina i obaveštenja salona.</p>
+                </div>
+
+                <div class="section-title">Aktivni termini klijenata</div>
+                <div id="adminBookingsList"></div>
+              </div>
+            </div>
+
+            <!-- TAB 2: POZIV -->
+            <div id="tab-call" class="hidden">
+              <div class="info-box">
+                <h4>Direktan Kontakt</h4>
+                <p>Za hitne izmene termina ili dodatne informacije pozovi direktno lokal.</p>
+                <span class="info-highlight">+381 60 123 4567</span>
+              </div>
+              <div class="info-box">
+                <h4>Radno Vreme</h4>
+                <p>Ponedeljak – Subota: 09:00 – 20:00<br>Nedelja: Neradni dan</p>
+              </div>
+            </div>
+
+            <!-- TAB 3: INSTAGRAM -->
+            <div id="tab-instagram" class="hidden">
+              <div class="info-box">
+                <h4>Zvanični Profil</h4>
+                <p>Prati najnovije radove, fade stilove i slobodne last-minute termine na Instagramu.</p>
+                <span class="info-highlight">@bojkela.barber</span>
+              </div>
+              <div class="info-box">
+                <h4>Galerija Stilova</h4>
+                <p>Skin Fade • Classic Cut • Hot Towel Shave • Beard Sculpting</p>
+              </div>
+            </div>
+
+            <!-- TAB 4: LOKACIJA -->
+            <div id="tab-location" class="hidden">
+              <div class="info-box">
+                <h4>Adresa Salona</h4>
+                <p>Nalazimo se u centru grada, sa obezbeđenim parkingom u blizini lokala.</p>
+                <span class="info-highlight">Kralja Petra 42, Beograd</span>
+              </div>
+              <div class="info-box">
+                <h4>Smernice</h4>
+                <p>Ulaz iz dvorišnog dela zgrade, lokal broj 3 u prizemlju.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- DONJA NAVIGACIJA -->
+          <div class="bottom-nav">
+            <button class="nav-item active" onclick="switchTab('home', this)">Termini</button>
+            <button class="nav-item" onclick="switchTab('call', this)">Poziv</button>
+            <button class="nav-item" onclick="switchTab('instagram', this)">Instagram</button>
+            <button class="nav-item" onclick="switchTab('location', this)">Lokacija</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const ADMIN_EMAIL = 'stefankovacevic310@gmail.com';
+    const ADMIN_PASS = 'bojkelabarber123';
+
+    let currentUser = null;
+    let selectedService = 'Muško šišanje';
+    let selectedPrice = '1.200 RSD';
+    let selectedTime = '10:00';
+
+    // Početni podaci u localStorage
+    let bookings = JSON.parse(localStorage.getItem('bojkela_bookings')) || [
+      { id: 1, user: 'Marko Marković', email: 'marko@mail.com', service: 'Šišanje + Brada', date: '2026-11-18', time: '13:00' },
+      { id: 2, user: 'Nikola Nikolić', email: 'nikola@mail.com', service: 'Muško šišanje', date: '2026-11-18', time: '15:00' }
+    ];
+
+    // Postavi današnji datum kao podrazumevani
+    const dateInput = document.getElementById('bookingDate');
+    const today = new Date().toISOString().split('T')[0];
+    dateInput.value = today;
+    dateInput.min = today;
+
+    function toggleAuthMode(mode) {
+      document.getElementById('authError').textContent = '';
+      if (mode === 'register') {
+        document.getElementById('loginForm').classList.add('hidden');
+        document.getElementById('registerForm').classList.remove('hidden');
+        document.getElementById('switchToRegister').classList.add('hidden');
+        document.getElementById('switchToLogin').classList.remove('hidden');
+        document.getElementById('authSubtitle').textContent = 'KREIRAJ NOVI NALOG';
+      } else {
+        document.getElementById('registerForm').classList.add('hidden');
+        document.getElementById('loginForm').classList.remove('hidden');
+        document.getElementById('switchToLogin').classList.add('hidden');
+        document.getElementById('switchToRegister').classList.remove('hidden');
+        document.getElementById('authSubtitle').textContent = 'PRIJAVI SE NA SVOJ NALOG';
+      }
+    }
+
+    // Login hendler -> Okreće karticu na drugu stranu
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+      const pass = document.getElementById('loginPassword').value;
+      const errorEl = document.getElementById('authError');
+
+      if (email === ADMIN_EMAIL && pass !== ADMIN_PASS) {
+        errorEl.textContent = 'Pogrešna admin lozinka.';
+        return;
+      }
+
+      errorEl.textContent = '';
+      const isAdmin = (email === ADMIN_EMAIL && pass === ADMIN_PASS);
+      currentUser = {
+        email: email,
+        name: isAdmin ? 'Bojkela Admin' : email.split('@')[0],
+        isAdmin: isAdmin
+      };
+
+      enterApp();
+    });
+
+    // Registracija hendler -> Okreće karticu na drugu stranu
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('regName').value.trim();
+      const email = document.getElementById('regEmail').value.trim().toLowerCase();
+
+      currentUser = {
+        email: email,
+        name: name || email.split('@')[0],
+        isAdmin: false
+      };
+
+      enterApp();
+    });
+
+    function enterApp() {
+      // Priprema sadržaja na zadnjoj strani pre okretanja
+      if (currentUser.isAdmin) {
+        document.getElementById('clientView').classList.add('hidden');
+        document.getElementById('adminView').classList.remove('hidden');
+        renderAdminBookings();
+      } else {
+        document.getElementById('adminView').classList.add('hidden');
+        document.getElementById('clientView').classList.remove('hidden');
+        document.getElementById('clientGreeting').textContent = `Dobrodošao, ${currentUser.name}`;
+        renderClientBookings();
+      }
+
+      // Reset na prvi tab
+      const firstNav = document.querySelector('.bottom-nav .nav-item');
+      switchTab('home', firstNav);
+
+      // Pokreni 3D Flip animaciju
+      document.getElementById('flipCard').classList.add('is-flipped');
+    }
+
+    function logoutUser() {
+      // Okreni karticu nazad na login ekran
+      document.getElementById('flipCard').classList.remove('is-flipped');
+      setTimeout(() => {
+        currentUser = null;
+        document.getElementById('loginPassword').value = '';
+      }, 400);
+    }
+
+    // Izbor usluge
+    document.querySelectorAll('.service-card').forEach(card => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.service-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        selectedService = card.dataset.service;
+        selectedPrice = card.dataset.price;
+      });
+    });
+
+    // Izbor vremena
+    document.querySelectorAll('.time-slot').forEach(slot => {
+      slot.addEventListener('click', () => {
+        document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+        slot.classList.add('selected');
+        selectedTime = slot.textContent;
+      });
+    });
+
+    function bookAppointment() {
+      const date = document.getElementById('bookingDate').value;
+      if (!date) return;
+
+      const newBooking = {
+        id: Date.now(),
+        user: currentUser.name,
+        email: currentUser.email,
+        service: selectedService,
+        date: date,
+        time: selectedTime
+      };
+
+      bookings.unshift(newBooking);
+      localStorage.setItem('bojkela_bookings', JSON.stringify(bookings));
+      renderClientBookings();
+      showToast('Termin uspešno zakazan!');
+    }
+
+    function deleteBooking(id) {
+      bookings = bookings.filter(b => b.id !== id);
+      localStorage.setItem('bojkela_bookings', JSON.stringify(bookings));
+      if (currentUser.isAdmin) {
+        renderAdminBookings();
+      } else {
+        renderClientBookings();
+      }
+      showToast('Termin je otkazan.');
+    }
+
+    function renderClientBookings() {
+      const container = document.getElementById('clientBookingsList');
+      const userBookings = bookings.filter(b => b.email === currentUser.email);
+
+      if (userBookings.length === 0) {
+        container.innerHTML = '<p style="font-size:12px; color:var(--text-muted);">Trenutno nemaš zakazanih termina.</p>';
+        return;
+      }
+
+      container.innerHTML = userBookings.map(b => `
+        <div class="booking-item">
+          <div class="booking-info">
+            <h4>${b.service}</h4>
+            <p>${b.date} u ${b.time}h</p>
+          </div>
+          <button class="btn-cancel" onclick="deleteBooking(${b.id})">Otkaži</button>
+        </div>
+      `).join('');
+    }
+
+    function renderAdminBookings() {
+      const container = document.getElementById('adminBookingsList');
+      if (bookings.length === 0) {
+        container.innerHTML = '<p style="font-size:12px; color:var(--text-muted);">Nema zakazanih termina.</p>';
+        return;
+      }
+
+      container.innerHTML = bookings.map(b => `
+        <div class="booking-item">
+          <div class="booking-info">
+            <h4>${b.user} – ${b.service}</h4>
+            <p>${b.date} u ${b.time}h (${b.email})</p>
+          </div>
+          <button class="btn-cancel" onclick="deleteBooking(${b.id})">Ukloni</button>
+        </div>
+      `).join('');
+    }
+
+    function switchTab(tabName, btnEl) {
+      ['home', 'call', 'instagram', 'location'].forEach(t => {
+        document.getElementById(`tab-${t}`).classList.add('hidden');
+      });
+      document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+
+      document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
+    }
+
+    function showToast(text) {
+      const toast = document.getElementById('toast');
+      toast.textContent = text;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2600);
+    }
+  </script>
 </body>
 </html>
