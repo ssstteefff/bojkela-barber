@@ -418,24 +418,24 @@
 <div class="phone-frame">
     <div class="screen" id="app-screen">
         
-        <!-- LOGIN EKRAN -->
-        <div id="login-view" style="padding: 20px;">
-            <div style="text-align: center; margin: 40px 0;">
-                <h2 style="color: var(--accent-color); margin-bottom: 8px;">BOJKELA BARBER</h2>
-                <p style="color: var(--text-muted); font-size: 0.9rem;">Prijavite se na sistem</p>
+        <!-- LOGIN EKRAN (Zlatna pozadina) -->
+        <div id="login-view" style="padding: 20px; background: linear-gradient(135deg, #d4af37 0%, #aa8c2c 100%); height: 100%; display: flex; flex-direction: column; justify-content: center;">
+            <div style="text-align: center; margin-bottom: 30px;">
+                <h2 style="color: #0b0b0b; margin-bottom: 8px; font-size: 1.6rem; letter-spacing: 1px;">BOJKELA BARBER</h2>
+                <p style="color: #222; font-size: 0.9rem; font-weight: 500;">Prijavite se na sistem</p>
             </div>
             <div class="input-group">
-                <label>Email / Korisničko ime</label>
-                <input type="text" id="login-email" placeholder="npr. stefan">
+                <label style="color: #222; font-weight: 600;">Email / Korisničko ime</label>
+                <input type="text" id="login-email" placeholder="npr. stefan" style="background: rgba(0,0,0,0.2); border-color: rgba(255,255,255,0.3); color: #fff;">
             </div>
             <div class="input-group" style="margin-top: 10px;">
-                <label>Šifra</label>
-                <input type="password" id="login-password" placeholder="npr. 123">
+                <label style="color: #222; font-weight: 600;">Šifra</label>
+                <input type="password" id="login-password" placeholder="npr. 123" style="background: rgba(0,0,0,0.2); border-color: rgba(255,255,255,0.3); color: #fff;">
             </div>
-            <div style="margin-top: 20px;">
-                <button class="btn-primary" style="width: 100%; margin: 0;" onclick="login()">Prijavi se</button>
+            <div style="margin-top: 20px; padding: 0 16px;">
+                <button class="btn-primary" style="width: 100%; margin: 0; background: #0b0b0b; color: var(--accent-color);" onclick="login()">Prijavi se</button>
             </div>
-            <p style="text-align: center; margin-top: 20px; font-size: 0.8rem; color: var(--text-muted);">
+            <p style="text-align: center; margin-top: 20px; font-size: 0.8rem; color: #1a1a1a; font-weight: 600;">
                 Test nalozi: admin / admin ili stefan / 123
             </p>
         </div>
@@ -481,10 +481,10 @@
                                 <a href="#" class="details-link">Detalji &rarr;</a>
                             </div>
                             <div class="service-details">Trajanje: 30 minuta</div>
-                            <div class="service-details">Cena: 1.200,00 RSD</div>
+                            <div class="service-details">Fiksna cena: 1.500,00 RSD</div>
                         </div>
                     </div>
-                    <button class="btn-primary" style="width: 100%; margin: 10px 0 0 0;" onclick="openBookingScreen('Fade šišanje', '1.200,00 RSD')">Rezerviši</button>
+                    <button class="btn-primary" style="width: 100%; margin: 10px 0 0 0;" onclick="openBookingScreen('Fade šišanje', '1.500,00 RSD')">Rezerviši</button>
                 </div>
 
                 <div class="service-card">
@@ -496,10 +496,10 @@
                                 <a href="#" class="details-link">Detalji &rarr;</a>
                             </div>
                             <div class="service-details">Trajanje: 20 minuta</div>
-                            <div class="service-details">Cena: 1.000,00 RSD</div>
+                            <div class="service-details">Fiksna cena: 1.200,00 RSD</div>
                         </div>
                     </div>
-                    <button class="btn-primary" style="width: 100%; margin: 10px 0 0 0;" onclick="openBookingScreen('Klasično šišanje', '1.000,00 RSD')">Rezerviši</button>
+                    <button class="btn-primary" style="width: 100%; margin: 10px 0 0 0;" onclick="openBookingScreen('Klasično šišanje', '1.200,00 RSD')">Rezerviši</button>
                 </div>
             </div>
 
@@ -585,7 +585,7 @@
                         <div id="booking-service-title" style="font-weight: bold; font-size: 0.95rem; text-transform: uppercase;">FADE ŠIŠANJE</div>
                     </div>
                     <div style="text-align: right;">
-                        <div id="booking-service-price" style="font-weight: bold; font-size: 0.95rem;">1.200,00 RSD</div>
+                        <div id="booking-service-price" style="font-weight: bold; font-size: 0.95rem;">1.500,00 RSD</div>
                         <div id="booking-time-range" style="font-size: 0.8rem; color: var(--text-muted);">Izaberite termin</div>
                     </div>
                 </div>
@@ -654,7 +654,7 @@
 
 <script>
     let currentUser = null;
-    let selectedService = { name: "Fade šišanje", price: "1.200,00 RSD" };
+    let selectedService = { name: "Fade šišanje", price: "1.500,00 RSD" };
     let selectedDate = "24";
     let selectedTime = null;
 
