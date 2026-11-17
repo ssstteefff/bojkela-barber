@@ -209,7 +209,7 @@
             line-height: 1.4;
         }
 
-        /* EKRAN ZA REZERVACIJU (Slike 1 i 2) */
+        /* EKRAN ZA REZERVACIJU */
         .booking-screen {
             padding: 16px;
             display: flex;
@@ -308,18 +308,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-        .barber-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 6px;
-        }
-        .barber-avatar {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            object-fit: cover;
         }
         .extra-service-btn {
             background: #141414;
@@ -517,7 +505,7 @@
             </div>
         </div>
 
-        <!-- NOVI EKRAN ZA REZERVACIJU (Slike 1 i 2) -->
+        <!-- EKRAN ZA REZERVACIJU -->
         <div id="booking-view" class="hidden">
             <div class="booking-screen">
                 <button class="back-btn" onclick="switchTab('termini')">&larr; Nazad</button>
@@ -533,19 +521,13 @@
                     </div>
                 </div>
 
-                <!-- Dinamički prikaz termina ili poruke da nema termina (Slika 1 / Slika 2) -->
-                <div id="time-slots-section">
-                    <!-- Ovde se ubacuju slobodni sati ili obaveštenje o listi čekanja -->
-                </div>
+                <!-- Dinamički prikaz termina ili poruke da nema termina -->
+                <div id="time-slots-section"></div>
 
-                <!-- Detalji izabrane usluge i frizera -->
+                <!-- Detalji izabrane usluge (bez imena frizera, sa desnom stranom) -->
                 <div class="booking-info-card">
                     <div>
                         <div id="booking-service-title" style="font-weight: bold; font-size: 0.95rem; text-transform: uppercase;">FADE ŠIŠANJE</div>
-                        <div class="barber-info">
-                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Nikola" class="barber-avatar">
-                            <span style="font-size: 0.85rem; color: var(--text-muted);">Nikola</span>
-                        </div>
                     </div>
                     <div style="text-align: right;">
                         <div id="booking-service-price" style="font-weight: bold; font-size: 0.95rem;">1.500,00 RSD</div>
@@ -618,7 +600,7 @@
 <script>
     let currentUser = null;
     let selectedService = { name: "Fade šišanje", price: "1.500,00 RSD" };
-    let selectedDate = "24"; // podrazumevano 24. novembar kao na slici
+    let selectedDate = "24";
     let selectedTime = null;
 
     let appointments = [
@@ -696,7 +678,6 @@
         if (activeItem) activeItem.classList.add('active');
     }
 
-    // Otvaranje ekrana za rezervaciju (Slike 1 i 2)
     function openBookingScreen(serviceName, price) {
         selectedService = { name: serviceName, price: price };
         document.getElementById('booking-service-title').innerText = serviceName;
@@ -711,9 +692,6 @@
     function renderCalendar() {
         const container = document.getElementById('calendar-days-container');
         let html = '';
-        // Dani u novembru 2026 (1 do 30) sa praznim mestima za početak
-        // 1. novembar 2026 je nedelja (zato stavljamo prazna mesta za Pon-Sub ako krećemo od nedelje, ili generišemo 1-30)
-        // Pojednostavljen prikaz brojeva od 1 do 30 tačno kao sa slike:
         for (let i = 1; i <= 30; i++) {
             const dayStr = i.toString();
             const isSelected = dayStr === selectedDate ? 'selected' : '';
@@ -741,7 +719,6 @@
     function renderTimeSlots() {
         const section = document.getElementById('time-slots-section');
         
-        // Simulacija: Za 24. novembar ima slobodnih termina (Slika 2), za ostale dane nema (Slika 1)
         if (selectedDate === "24") {
             const slots = ["11:00", "11:30", "12:00", "12:30", "13:00"];
             let slotsHtml = `<div class="time-slots-container">`;
@@ -752,7 +729,6 @@
             slotsHtml += `</div>`;
             section.innerHTML = slotsHtml;
         } else {
-            // Prikaz kada nema termina (Slika 1)
             section.innerHTML = `
                 <div style="text-align: center; padding: 15px 0; color: var(--text-muted); font-size: 0.9rem; line-height: 1.5;">
                     Nema dostupnih termina za odabrani datum<br>
@@ -811,7 +787,7 @@
                 </div>
                 <div class="hours-container">
             `;
-            grouped[app => app.date === dateStr] || grouped[dateStr].forEach(app => {
+            grouped[dateStr].forEach(app => {
                 html += `
                     <div class="hour-badge booked">
                         <span>🕒 ${app.time}h - ${app.service} (${app.name})</span>
