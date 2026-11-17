@@ -106,7 +106,7 @@
             color: var(--text-muted);
             margin-bottom: 6px;
         }
-        .input-group input {
+        .input-group input, .input-group select {
             width: 100%;
             padding: 10px;
             background: var(--card-bg);
@@ -115,7 +115,7 @@
             color: #fff;
             font-size: 0.95rem;
         }
-        .input-group input:focus {
+        .input-group input:focus, .input-group select:focus {
             border-color: var(--accent-color);
             outline: none;
         }
@@ -152,8 +152,11 @@
             color: var(--text-muted);
             font-size: 0.7rem;
             cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s;
         }
-        .nav-item.active {
+        .nav-item:hover {
+            opacity: 1;
             color: var(--accent-color);
         }
         .hidden {
@@ -212,14 +215,16 @@
             </div>
             <div class="card">
                 <h3>Dobrodošao, Stefan!</h3>
-                <p>Zakažite svoj termin kod željenog frizera u par klikova.</p>
+                <p>Zakažite svoj termin za muško šišanje u par klikova.</p>
             </div>
 
             <div class="card">
                 <h3>Zakazivanje termina</h3>
                 <div class="input-group" style="margin-top: 10px;">
                     <label>Izaberi uslugu</label>
-                    <input type="text" id="service-name" value="Muško šišanje" readonly>
+                    <select id="service-name">
+                        <option value="Muško šišanje">Muško šišanje</option>
+                    </select>
                 </div>
                 <div class="input-group">
                     <label>Datum i vreme</label>
@@ -241,7 +246,7 @@
 
     <!-- DONJA NAVIGACIJA -->
     <div class="bottom-nav" id="bottom-nav" style="display: none;">
-        <div class="nav-item active">
+        <div class="nav-item">
             <div>📅</div>
             <div>TERMINI</div>
         </div>
@@ -263,7 +268,7 @@
 <script>
     let currentUser = null;
     let appointments = [
-        { id: 1, name: "Nikola Nikolić", service: "Muško šišanje", datetime: "2026-11-18 u 15:00h", email: "nikola@mail.com", phone: "+38160111222" }
+        { id: 1, name: "Nikola Nikolić", service: "Muško šišanje", datetime: "2026-11-18 u 15:00h", email: "nikola@mail.com", phone: "+38160111222", createdAt: Date.now() }
     ];
 
     function login() {
@@ -327,37 +332,47 @@
             list.innerHTML = `<p style="color: var(--text-muted); font-size: 0.85rem;">Nemate zakazanih termina.</p>`;
             return;
         }
-        list.innerHTML = myAppointments.map(app => `
-            <div class="card" style="display: flex; justify-content: space-between; align-items: center;">
-                <div>
-                    <h3>${app.service}</h3>
-                    <p>${app.datetime} (<a href="tel:${app.phone}" class="phone-link">${app.phone}</a>)</p>
+
+        const now = Date.now();
+        const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000;
+
+        list.innerHTML = myAppointments.map(app => {
+            const canCancel = (now - app.createdAt) <= TWENTY_FOUR_HOURS;
+            return `
+                <div class="card" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h3>${app.service}</h3>
+                        <p>${app.datetime} (<a href="tel:${app.phone}" class="phone-link">${app.phone}</a>)</p>
+                    </div>
+                    <div>
+                        ${canCancel ? `<button class="btn-danger" onclick="cancelAppointment(${app.id})">Otkaži</button>` : `<span style="font-size: 0.75rem; color: var(--text-muted);">Istekao rok za otkaz</span>`}
+                    </div>
                 </div>
-                <button class="btn-danger" onclick="cancelAppointment(${app.id})">Otkaži</button>
-            </div>
-        `).join('');
+            `;
+        }).join('');
     }
 
     function bookAppointment() {
         const datetimeVal = document.getElementById('appointment-date').value;
         const phoneVal = document.getElementById('client-phone').value;
+        const serviceVal = document.getElementById('service-name').value;
         
         if (!datetimeVal) {
             alert('Molimo izaberite datum i vreme.');
             return;
         }
 
-        // Formatiranje datuma
         const dateObj = new Date(datetimeVal);
         const formatted = `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}-${String(dateObj.getDate()).padStart(2, '0')} u ${String(dateObj.getHours()).padStart(2, '0')}:${String(dateObj.getMinutes()).padStart(2, '0')}h`;
 
         appointments.push({
             id: Date.now(),
             name: "Stefan Stefanović",
-            service: "Muško šišanje",
+            service: serviceVal,
             datetime: formatted,
             email: "stefan@mail.com",
-            phone: phoneVal
+            phone: phoneVal,
+            createdAt: Date.now()
         });
 
         alert('Termin uspešno zakazan!');
@@ -365,7 +380,17 @@
     }
 
     function cancelAppointment(id) {
-        appointments = appointments.filter(app => app.id !== id);
+        const app = appointments.find(a => a.id === id);
+        if (currentUser === 'stefan' && app) {
+            const now = Date.now();
+            const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000;
+            if ((now - app.createdAt) > TWENTY_FOUR_HOURS) {
+                alert('Prošlo je više od 24 sata od zakazivanja, otkazivanje više nije moguće.');
+                return;
+            }
+        }
+
+        appointments = appointments.filter(a => a.id !== id);
         if (currentUser === 'admin') {
             renderAdminAppointments();
         } else {
