@@ -106,7 +106,7 @@
             color: var(--text-muted);
             margin-bottom: 6px;
         }
-        .input-group input, .input-group select {
+        .input-group input {
             width: 100%;
             padding: 10px;
             background: var(--card-bg);
@@ -115,7 +115,7 @@
             color: #fff;
             font-size: 0.95rem;
         }
-        .input-group input:focus, .input-group select:focus {
+        .input-group input:focus {
             border-color: var(--accent-color);
             outline: none;
         }
@@ -152,11 +152,13 @@
             color: var(--text-muted);
             font-size: 0.7rem;
             cursor: pointer;
-            opacity: 0.7;
-            transition: opacity 0.2s;
+            filter: grayscale(100%);
+            opacity: 0.6;
+            transition: all 0.2s;
         }
         .nav-item:hover {
             opacity: 1;
+            filter: grayscale(0%);
             color: var(--accent-color);
         }
         .hidden {
@@ -221,10 +223,8 @@
             <div class="card">
                 <h3>Zakazivanje termina</h3>
                 <div class="input-group" style="margin-top: 10px;">
-                    <label>Izaberi uslugu</label>
-                    <select id="service-name">
-                        <option value="Muško šišanje">Muško šišanje</option>
-                    </select>
+                    <label>Usluga</label>
+                    <input type="text" id="service-name" value="Muško šišanje" readonly style="background-color: #151515; color: var(--accent-color); font-weight: bold;">
                 </div>
                 <div class="input-group">
                     <label>Datum i vreme</label>
@@ -232,7 +232,7 @@
                 </div>
                 <div class="input-group">
                     <label>Broj telefona</label>
-                    <input type="text" id="client-phone" value="+381 61 2345678">
+                    <input type="text" id="client-phone" value="061 2345678">
                 </div>
                 <button class="btn-primary" onclick="bookAppointment()">Potvrdi zakazivanje</button>
             </div>
@@ -268,7 +268,7 @@
 <script>
     let currentUser = null;
     let appointments = [
-        { id: 1, name: "Nikola Nikolić", service: "Muško šišanje", datetime: "2026-11-18 u 15:00h", email: "nikola@mail.com", phone: "+38160111222", createdAt: Date.now() }
+        { id: 1, name: "Nikola Nikolić", service: "Muško šišanje", datetime: "2026-11-18 u 15:00h", email: "nikola@mail.com", phone: "060 111222", createdAt: Date.now() }
     ];
 
     function login() {
@@ -339,13 +339,18 @@
         list.innerHTML = myAppointments.map(app => {
             const canCancel = (now - app.createdAt) <= TWENTY_FOUR_HOURS;
             return `
-                <div class="card" style="display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <h3>${app.service}</h3>
-                        <p>${app.datetime} (<a href="tel:${app.phone}" class="phone-link">${app.phone}</a>)</p>
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                        <div>
+                            <h3>${app.service}</h3>
+                            <p style="margin-bottom: 0;">${app.datetime} (<a href="tel:${app.phone}" class="phone-link">${app.phone}</a>)</p>
+                        </div>
+                        <div>
+                            ${canCancel ? `<button class="btn-danger" onclick="cancelAppointment(${app.id})">Otkaži</button>` : `<span style="font-size: 0.75rem; color: var(--text-muted);">Istekao rok</span>`}
+                        </div>
                     </div>
-                    <div>
-                        ${canCancel ? `<button class="btn-danger" onclick="cancelAppointment(${app.id})">Otkaži</button>` : `<span style="font-size: 0.75rem; color: var(--text-muted);">Istekao rok za otkaz</span>`}
+                    <div style="font-size: 0.7rem; color: var(--text-muted); font-style: italic;">
+                        (termin moguće otkazati najkasnije 24h od zakazivanja)
                     </div>
                 </div>
             `;
