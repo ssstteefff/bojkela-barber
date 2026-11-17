@@ -6,8 +6,8 @@
     <title>Bojkela Barber</title>
     <style>
         :root {
-            --bg-color: #121212;
-            --card-bg: #1e1e1e;
+            --bg-color: #0b0b0b;
+            --card-bg: #141414;
             --accent-color: #d4af37;
             --text-color: #ffffff;
             --text-muted: #aaaaaa;
@@ -46,16 +46,16 @@
             display: flex;
             flex-direction: column;
             overflow-y: auto;
-            padding: 20px;
+            padding: 0;
         }
-        .header {
+        .app-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 24px;
+            padding: 20px 20px 10px 20px;
         }
-        .header h1 {
-            font-size: 1.2rem;
+        .app-header h1 {
+            font-size: 1.1rem;
             color: var(--accent-color);
             letter-spacing: 1px;
         }
@@ -77,8 +77,8 @@
             background-color: var(--card-bg);
             border-radius: 12px;
             padding: 16px;
-            margin-bottom: 16px;
-            border-left: 4px solid var(--accent-color);
+            margin: 0 16px 16px 16px;
+            border: 1px solid #222;
         }
         .card h3 {
             font-size: 1rem;
@@ -122,7 +122,7 @@
         .btn-primary {
             width: 100%;
             background: var(--accent-color);
-            color: #000;
+            color: #0b0b0b;
             border: none;
             padding: 12px;
             border-radius: 8px;
@@ -130,6 +130,10 @@
             cursor: pointer;
             font-size: 1rem;
             margin-top: 10px;
+            text-transform: uppercase;
+        }
+        .btn-primary:hover {
+            background: #e6be40;
         }
         .btn-danger {
             background: transparent;
@@ -141,12 +145,92 @@
             cursor: pointer;
         }
         
+        /* Stil za katalog usluga (sa slike) */
+        .service-header-bg {
+            position: relative;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.9)), url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=800&q=80') center/cover;
+            padding: 20px 16px 20px 16px;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            margin-bottom: 20px;
+        }
+        .categories {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            overflow-x: auto;
+            white-space: nowrap;
+            margin-top: 15px;
+        }
+        .category {
+            font-size: 15px;
+            color: #888;
+            cursor: pointer;
+            padding-bottom: 4px;
+            font-weight: 600;
+        }
+        .category.active {
+            color: #ffffff;
+            border-bottom: 2px solid var(--accent-color);
+        }
+        .services-list {
+            padding: 0 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .service-card {
+            background-color: var(--card-bg);
+            border: 1px solid #222;
+            border-radius: 14px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .service-content {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .service-img {
+            width: 75px;
+            height: 75px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+        .service-info {
+            flex: 1;
+        }
+        .service-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+        .service-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #ffffff;
+            text-transform: uppercase;
+        }
+        .details-link {
+            font-size: 12px;
+            color: #aaa;
+            text-decoration: none;
+        }
+        .service-details {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
         /* Stil za dan i satčiće */
         .accordion-header {
             background: var(--card-bg);
             padding: 14px;
             border-radius: 8px;
-            margin-bottom: 8px;
+            margin: 0 16px 8px 16px;
             cursor: pointer;
             display: flex;
             justify-content: space-between;
@@ -158,7 +242,8 @@
             border-color: var(--accent-color);
         }
         .hours-container {
-            padding-left: 12px;
+            padding-left: 28px;
+            padding-right: 16px;
             margin-bottom: 12px;
         }
         .hour-badge {
@@ -227,8 +312,9 @@
 
 <div class="phone-frame">
     <div class="screen" id="app-screen">
+        
         <!-- LOGIN EKRAN -->
-        <div id="login-view">
+        <div id="login-view" style="padding: 20px;">
             <div style="text-align: center; margin: 40px 0;">
                 <h2 style="color: var(--accent-color); margin-bottom: 8px;">BOJKELA BARBER</h2>
                 <p style="color: var(--text-muted); font-size: 0.9rem;">Prijavite se na sistem</p>
@@ -251,7 +337,7 @@
 
         <!-- ADMIN KONTROLNA TABLA -->
         <div id="admin-view" class="hidden">
-            <div class="header">
+            <div class="app-header">
                 <h1>BOJKELA BARBER</h1>
                 <button class="btn" onclick="logout()">Odjavi se</button>
             </div>
@@ -259,44 +345,89 @@
                 <h3>Admin Kontrolna Tabla</h3>
                 <p>Pregled termina po danima. Klikni na dan pa na sat za detalje.</p>
             </div>
-            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Kalendar i raspored</p>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0 16px 12px 16px; text-transform: uppercase; letter-spacing: 0.5px;">Kalendar i raspored</p>
             
             <div id="admin-days-list">
                 <!-- Dinamički sadržaj po danima -->
             </div>
         </div>
 
-        <!-- KLIJENT POGLED -->
+        <!-- KLIJENT POGLED (Usluge & Cenovnik kao sa slike) -->
         <div id="client-view" class="hidden">
-            <div class="header">
-                <h1>BOJKELA BARBER</h1>
-                <button class="btn" onclick="logout()">Odjavi se</button>
-            </div>
-            <div class="card">
-                <h3>Dobrodošao, Stefan!</h3>
-                <p>Zakažite svoj termin za muško šišanje u par klikova.</p>
-            </div>
-
-            <div class="card">
-                <h3>Zakazivanje termina</h3>
-                <div class="input-group" style="margin-top: 10px;">
-                    <label>Usluga</label>
-                    <input type="text" id="service-name" value="Muško šišanje" readonly style="background-color: #151515; color: var(--accent-color); font-weight: bold;">
+            <div class="service-header-bg">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="color: #fff; font-size: 14px; font-weight: 500; cursor: pointer;" onclick="logout()">&larr; Odjavi se</span>
+                    <h1 style="font-size: 1.1rem; color: var(--accent-color); letter-spacing: 1px; text-transform: uppercase;">Bojkela Barber</h1>
                 </div>
-                <div class="input-group">
-                    <label>Datum i vreme</label>
-                    <input type="datetime-local" id="appointment-date" value="2026-11-18T15:00">
+                <div style="text-align: center; margin-top: 15px;">
+                    <h2 style="font-size: 18px; color: var(--accent-color); text-transform: uppercase; margin-bottom: 5px;">Usluge & Cenovnik</h2>
+                    <div class="categories">
+                        <span class="category active">Šišanje</span>
+                        <span class="category">Brada</span>
+                        <span class="category">Kompleti</span>
+                    </div>
                 </div>
-                <div class="input-group">
-                    <label>Broj telefona</label>
-                    <input type="text" id="client-phone" value="061 2345678">
-                </div>
-                <button class="btn-primary" onclick="bookAppointment()">Potvrdi zakazivanje</button>
             </div>
 
-            <p style="font-size: 0.8rem; color: var(--text-muted); margin: 12px 0 8px; text-transform: uppercase; letter-spacing: 0.5px;">Moji termini</p>
-            <div id="client-appointments-list">
-                <!-- Dinamički sadržaj -->
+            <!-- Lista usluga u stilu prve slike -->
+            <div class="services-list">
+                
+                <!-- Usluga 1 -->
+                <div class="service-card">
+                    <div class="service-content">
+                        <img src="https://images.unsplash.com/photo-1622286342621-4bd786c2447c?auto=format&fit=crop&w=200&q=80" alt="Fade šišanje" class="service-img">
+                        <div class="service-info">
+                            <div class="service-header-row">
+                                <span class="service-title">Fade šišanje</span>
+                                <a href="#" class="details-link">Detalji &rarr;</a>
+                            </div>
+                            <div class="service-details">Trajanje: 30 minuta</div>
+                            <div class="service-details">Fiksna cena: 1.500,00 RSD</div>
+                        </div>
+                    </div>
+                    <button class="btn-primary" onclick="prepareBooking('Fade šišanje', '1.500,00 RSD')">Rezerviši</button>
+                </div>
+
+                <!-- Usluga 2 -->
+                <div class="service-card">
+                    <div class="service-content">
+                        <img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&w=200&q=80" alt="Klasično šišanje" class="service-img">
+                        <div class="service-info">
+                            <div class="service-header-row">
+                                <span class="service-title">Klasično šišanje</span>
+                                <a href="#" class="details-link">Detalji &rarr;</a>
+                            </div>
+                            <div class="service-details">Trajanje: 20 minuta</div>
+                            <div class="service-details">Fiksna cena: 1.200,00 RSD</div>
+                        </div>
+                    </div>
+                    <button class="btn-primary" onclick="prepareBooking('Klasično šišanje', '1.200,00 RSD')">Rezerviši</button>
+                </div>
+
+                <!-- Usluga 3 -->
+                <div class="service-card">
+                    <div class="service-content">
+                        <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=200&q=80" alt="Klasično mašenje" class="service-img">
+                        <div class="service-info">
+                            <div class="service-header-row">
+                                <span class="service-title">Klasično mašenje</span>
+                                <a href="#" class="details-link">Detalji &rarr;</a>
+                            </div>
+                            <div class="service-details">Trajanje: 20 minuta</div>
+                            <div class="service-details">Fiksna cena: 1.000,00 RSD</div>
+                        </div>
+                    </div>
+                    <button class="btn-primary" onclick="prepareBooking('Klasično mašenje', '1.000,00 RSD')">Rezerviši</button>
+                </div>
+
+            </div>
+
+            <!-- Sekcija za pregled zakazanih termina ispod -->
+            <div style="padding: 20px 16px 10px 16px;">
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Moji termini</p>
+                <div id="client-appointments-list">
+                    <!-- Dinamički sadržaj -->
+                </div>
             </div>
         </div>
 
@@ -351,7 +482,7 @@
 <script>
     let currentUser = null;
     let appointments = [
-        { id: 1, name: "Nikola Nikolić", service: "Muško šišanje", date: "2026-11-18", time: "15:00", datetime: "2026-11-18 u 15:00h", email: "nikola@mail.com", phone: "060 111222", createdAt: Date.now() }
+        { id: 1, name: "Nikola Nikolić", service: "Fade šišanje", date: "2026-11-18", time: "15:00", datetime: "2026-11-18 u 15:00h", email: "nikola@mail.com", phone: "060 111222", createdAt: Date.now() }
     ];
 
     let openDays = {};
@@ -366,11 +497,13 @@
             showScreen('admin-view');
             document.getElementById('bottom-nav').style.display = 'flex';
             setActiveNav('termini');
+            renderAdminAppointments();
         } else if (email === 'stefan' && pass === '123') {
             currentUser = 'stefan';
             showScreen('client-view');
             document.getElementById('bottom-nav').style.display = 'flex';
             setActiveNav('termini');
+            renderClientAppointments();
         } else {
             alert('Pogrešan email ili šifra! Koristite stefan / 123 za klijenta ili admin / admin za admina.');
         }
@@ -398,7 +531,6 @@
     function switchTab(tabName) {
         if (!currentUser) return;
 
-        // Označi aktivnu ikonicu u navigaciji
         setActiveNav(tabName);
 
         if (tabName === 'termini') {
@@ -437,7 +569,7 @@
     function renderAdminAppointments() {
         const list = document.getElementById('admin-days-list');
         if (appointments.length === 0) {
-            list.innerHTML = `<p style="color: var(--text-muted); font-size: 0.85rem;">Nema zakazanih termina.</p>`;
+            list.innerHTML = `<p style="color: var(--text-muted); font-size: 0.85rem; padding: 0 16px;">Nema zakazanih termina.</p>`;
             return;
         }
 
@@ -515,7 +647,7 @@
         list.innerHTML = myAppointments.map(app => {
             const canCancel = (now - app.createdAt) <= TWENTY_FOUR_HOURS;
             return `
-                <div class="card">
+                <div class="card" style="margin: 0 0 10px 0;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                         <div>
                             <h3>${app.service}</h3>
@@ -533,36 +665,29 @@
         }).join('');
     }
 
-    function bookAppointment() {
-        const datetimeVal = document.getElementById('appointment-date').value;
-        const phoneVal = document.getElementById('client-phone').value;
-        const serviceVal = document.getElementById('service-name').value;
-        
-        if (!datetimeVal) {
-            alert('Molimo izaberite datum i vreme.');
+    function prepareBooking(serviceName, price) {
+        const datetimeStr = prompt(`Izabrali ste uslugu: ${serviceName} (${price})\nUnesite datum i vreme u formatu YYYY-MM-DD HH:MM (npr. 2026-11-19 14:00):`, "2026-11-19 15:00");
+        if (!datetimeStr) return;
+
+        const parts = datetimeStr.split(' ');
+        if (parts.length < 2) {
+            alert('Neispravan format datuma i vremena.');
             return;
         }
 
-        const dateObj = new Date(datetimeVal);
-        const year = dateObj.getFullYear();
-        const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-        const day = String(dateObj.getDate()).padStart(2, '0');
-        const hours = String(dateObj.getHours()).padStart(2, '0');
-        const minutes = String(dateObj.getMinutes()).padStart(2, '0');
-
-        const dateStr = `${year}-${month}-${day}`;
-        const timeStr = `${hours}:${minutes}`;
-        const formatted = `${dateStr} u ${hours}:${minutes}h`;
+        const dateStr = parts[0];
+        const timeStr = parts[1];
+        const formatted = `${dateStr} u ${timeStr}h`;
 
         appointments.push({
             id: Date.now(),
             name: "Stefan Stefanović",
-            service: serviceVal,
+            service: serviceName,
             date: dateStr,
             time: timeStr,
             datetime: formatted,
             email: "stefan@mail.com",
-            phone: phoneVal,
+            phone: "061 2345678",
             createdAt: Date.now()
         });
 
