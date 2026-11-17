@@ -140,27 +140,84 @@
             font-size: 0.75rem;
             cursor: pointer;
         }
+        
+        /* Stil za dan i satčiće */
+        .accordion-header {
+            background: var(--card-bg);
+            padding: 14px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            border: 1px solid #2a2a2a;
+        }
+        .accordion-header:hover {
+            border-color: var(--accent-color);
+        }
+        .hours-container {
+            padding-left: 12px;
+            margin-bottom: 12px;
+        }
+        .hour-badge {
+            background: #181818;
+            border: 1px solid #333;
+            padding: 10px 14px;
+            border-radius: 6px;
+            margin-bottom: 6px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .hour-badge:hover {
+            border-color: var(--accent-color);
+            background: #222;
+        }
+        .hour-badge.booked {
+            border-left: 3px solid var(--accent-color);
+        }
+
+        /* Donja navigacija sa čistim SVG linijama */
         .bottom-nav {
             display: flex;
             justify-content: space-around;
             background-color: #181818;
-            padding: 12px 0;
+            padding: 10px 0;
             border-top: 1px solid #222;
         }
         .nav-item {
             text-align: center;
             color: var(--text-muted);
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             cursor: pointer;
-            filter: grayscale(100%);
-            opacity: 0.6;
-            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            transition: color 0.2s;
         }
-        .nav-item:hover {
-            opacity: 1;
-            filter: grayscale(0%);
+        .nav-item svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--text-muted);
+            fill: none;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: stroke 0.2s;
+        }
+        .nav-item:hover, .nav-item.active {
             color: var(--accent-color);
         }
+        .nav-item:hover svg, .nav-item.active svg {
+            stroke: var(--accent-color);
+        }
+
         .hidden {
             display: none !important;
         }
@@ -200,12 +257,12 @@
             </div>
             <div class="card">
                 <h3>Admin Kontrolna Tabla</h3>
-                <p>Pregled svih aktivnih termina i obaveštenja salona.</p>
+                <p>Pregled termina po danima. Klikni na dan pa na sat za detalje.</p>
             </div>
-            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Aktivni termini klijenata</p>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Kalendar i raspored</p>
             
-            <div id="admin-appointments-list">
-                <!-- Dinamički sadržaj -->
+            <div id="admin-days-list">
+                <!-- Dinamički sadržaj po danima -->
             </div>
         </div>
 
@@ -244,23 +301,23 @@
         </div>
     </div>
 
-    <!-- DONJA NAVIGACIJA -->
+    <!-- DONJA NAVIGACIJA SA FENSI SVG LINIJAMA BEZ BOJE -->
     <div class="bottom-nav" id="bottom-nav" style="display: none;">
-        <div class="nav-item">
-            <div>📅</div>
-            <div>TERMINI</div>
+        <div class="nav-item active">
+            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            <span>TERMINI</span>
         </div>
         <div class="nav-item">
-            <div>📞</div>
-            <div>POZIV</div>
+            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            <span>POZIV</span>
         </div>
         <div class="nav-item">
-            <div>📷</div>
-            <div>INSTAGRAM</div>
+            <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+            <span>INSTAGRAM</span>
         </div>
         <div class="nav-item">
-            <div>📍</div>
-            <div>LOKACIJA</div>
+            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            <span>LOKACIJA</span>
         </div>
     </div>
 </div>
@@ -268,8 +325,11 @@
 <script>
     let currentUser = null;
     let appointments = [
-        { id: 1, name: "Nikola Nikolić", service: "Muško šišanje", datetime: "2026-11-18 u 15:00h", email: "nikola@mail.com", phone: "060 111222", createdAt: Date.now() }
+        { id: 1, name: "Nikola Nikolić", service: "Muško šišanje", date: "2026-11-18", time: "15:00", datetime: "2026-11-18 u 15:00h", email: "nikola@mail.com", phone: "060 111222", createdAt: Date.now() }
     ];
+
+    let openDays = {};
+    let openHours = {};
 
     function login() {
         const email = document.getElementById('login-email').value.trim().toLowerCase();
@@ -307,21 +367,82 @@
         }
     }
 
+    function toggleDay(dateStr) {
+        openDays[dateStr] = !openDays[dateStr];
+        renderAdminAppointments();
+    }
+
+    function toggleHour(uniqueKey) {
+        openHours[uniqueKey] = !openHours[uniqueKey];
+        renderAdminAppointments();
+    }
+
     function renderAdminAppointments() {
-        const list = document.getElementById('admin-appointments-list');
+        const list = document.getElementById('admin-days-list');
         if (appointments.length === 0) {
-            list.innerHTML = `<p style="color: var(--text-muted); font-size: 0.85rem;">Nema aktivnih termina.</p>`;
+            list.innerHTML = `<p style="color: var(--text-muted); font-size: 0.85rem;">Nema zakazanih termina.</p>`;
             return;
         }
-        list.innerHTML = appointments.map(app => `
-            <div class="card" style="display: flex; justify-content: space-between; align-items: center;">
-                <div>
-                    <h3>${app.name} - ${app.service}</h3>
-                    <p>${app.datetime} (<a href="tel:${app.phone}" class="phone-link">${app.phone}</a>)<br><span style="font-size: 0.75rem;">(${app.email})</span></p>
+
+        // Grupiši termine po danima
+        const grouped = {};
+        appointments.forEach(app => {
+            if (!grouped[app.date]) {
+                grouped[app.date] = [];
+            }
+            grouped[app.date].push(app);
+        });
+
+        // Radni sati salona
+        const workingHours = ["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00"];
+
+        let html = '';
+        for (const dateStr in grouped) {
+            const isDayOpen = openDays[dateStr];
+            html += `
+                <div class="accordion-header" onclick="toggleDay('${dateStr}')">
+                    <span>📅 ${dateStr} (${grouped[dateStr].length} zakazano)</span>
+                    <span style="font-size: 0.8rem; color: var(--text-muted);">${isDayOpen ? '▲' : '▼'}</span>
                 </div>
-                <button class="btn-danger" onclick="cancelAppointment(${app.id})">Ukloni</button>
-            </div>
-        `).join('');
+            `;
+
+            if (isDayOpen) {
+                html += `<div class="hours-container">`;
+                workingHours.forEach(hour => {
+                    const foundApp = grouped[dateStr].find(a => a.time === hour);
+                    const uniqueKey = `${dateStr}_${hour}`;
+                    const isHourOpen = openHours[uniqueKey];
+
+                    if (foundApp) {
+                        html += `
+                            <div class="hour-badge booked" onclick="toggleHour('${uniqueKey}')">
+                                <span style="font-weight: bold; color: var(--accent-color);">🕒 ${hour}h - ${foundApp.name}</span>
+                                <span style="font-size: 0.75rem; color: var(--text-muted);">${isHourOpen ? '▲ Detalji' : '▼ Detalji'}</span>
+                            </div>
+                        `;
+                        if (isHourOpen) {
+                            html += `
+                                <div style="background: #161616; padding: 12px; border-radius: 6px; margin-bottom: 8px; border: 1px dashed #333;">
+                                    <p style="margin-bottom: 4px; font-size: 0.85rem;"><strong>Usluga:</strong> ${foundApp.service}</p>
+                                    <p style="margin-bottom: 6px; font-size: 0.85rem;"><strong>Klijent:</strong> ${foundApp.name} (<a href="tel:${foundApp.phone}" class="phone-link">${foundApp.phone}</a>)</p>
+                                    <p style="margin-bottom: 8px; font-size: 0.75rem; color: var(--text-muted);">Email: ${foundApp.email}</p>
+                                    <button class="btn-danger" onclick="cancelAppointment(${foundApp.id})">Ukloni termin</button>
+                                </div>
+                            `;
+                        }
+                    } else {
+                        html += `
+                            <div class="hour-badge" style="opacity: 0.5;">
+                                <span>🕒 ${hour}h</span>
+                                <span style="font-size: 0.75rem; color: var(--text-muted);">Slobodno</span>
+                            </div>
+                        `;
+                    }
+                });
+                html += `</div>`;
+            }
+        }
+        list.innerHTML = html;
     }
 
     function renderClientAppointments() {
@@ -368,12 +489,22 @@
         }
 
         const dateObj = new Date(datetimeVal);
-        const formatted = `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}-${String(dateObj.getDate()).padStart(2, '0')} u ${String(dateObj.getHours()).padStart(2, '0')}:${String(dateObj.getMinutes()).padStart(2, '0')}h`;
+        const year = dateObj.getFullYear();
+        const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+        const day = String(dateObj.getDate()).padStart(2, '0');
+        const hours = String(dateObj.getHours()).padStart(2, '0');
+        const minutes = String(dateObj.getMinutes()).padStart(2, '0');
+
+        const dateStr = `${year}-${month}-${day}`;
+        const timeStr = `${hours}:${minutes}`;
+        const formatted = `${dateStr} u ${hours}:${minutes}h`;
 
         appointments.push({
             id: Date.now(),
             name: "Stefan Stefanović",
             service: serviceVal,
+            date: dateStr,
+            time: timeStr,
             datetime: formatted,
             email: "stefan@mail.com",
             phone: phoneVal,
