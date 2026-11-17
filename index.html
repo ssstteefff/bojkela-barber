@@ -20,7 +20,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         body {
-            background-color: var(--bg-color);
+            background-color: #050505;
             color: var(--text-color);
             display: flex;
             justify-content: center;
@@ -31,14 +31,14 @@
             width: 100%;
             max-width: 400px;
             height: 800px;
-            background-color: #000;
-            border: 12px solid #333;
+            background-color: var(--bg-color);
+            border: 12px solid #222;
             border-radius: 40px;
             display: flex;
             flex-direction: column;
             overflow: hidden;
             position: relative;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.8);
         }
         .screen {
             flex: 1;
@@ -411,6 +411,21 @@
         .hidden {
             display: none !important;
         }
+
+        /* Na pravom telefonu uklanja okvir i puni ceo ekran */
+        @media (max-width: 480px) {
+            body {
+                background-color: var(--bg-color);
+                align-items: flex-start;
+            }
+            .phone-frame {
+                max-width: 100%;
+                height: 100dvh;
+                border: none;
+                border-radius: 0;
+                box-shadow: none;
+            }
+        }
     </style>
 </head>
 <body>
@@ -418,24 +433,24 @@
 <div class="phone-frame">
     <div class="screen" id="app-screen">
         
-        <!-- LOGIN EKRAN (Crvena pozadina) -->
-        <div id="login-view" style="padding: 20px; background: linear-gradient(135deg, #8b0000 0%, #4a0000 100%); height: 100%; display: flex; flex-direction: column; justify-content: center;">
+        <!-- LOGIN EKRAN -->
+        <div id="login-view" style="padding: 20px; background: radial-gradient(circle at top, #1c1a15 0%, #0b0b0b 75%); height: 100%; display: flex; flex-direction: column; justify-content: center;">
             <div style="text-align: center; margin-bottom: 30px;">
                 <h2 style="color: var(--accent-color); margin-bottom: 8px; font-size: 1.6rem; letter-spacing: 1px;">BOJKELA BARBER</h2>
-                <p style="color: #ddd; font-size: 0.9rem; font-weight: 500;">Prijavite se na sistem</p>
+                <p style="color: var(--text-muted); font-size: 0.9rem; font-weight: 500;">Prijavite se na sistem</p>
             </div>
             <div class="input-group">
-                <label style="color: #ddd; font-weight: 600;">Email / Korisničko ime</label>
-                <input type="text" id="login-email" placeholder="npr. stefan" style="background: rgba(0,0,0,0.3); border-color: rgba(255,255,255,0.3); color: #fff;">
+                <label>Email / Korisničko ime</label>
+                <input type="text" id="login-email" placeholder="npr. stefan">
             </div>
             <div class="input-group" style="margin-top: 10px;">
-                <label style="color: #ddd; font-weight: 600;">Šifra</label>
-                <input type="password" id="login-password" placeholder="npr. 123" style="background: rgba(0,0,0,0.3); border-color: rgba(255,255,255,0.3); color: #fff;">
+                <label>Šifra</label>
+                <input type="password" id="login-password" placeholder="npr. 123">
             </div>
             <div style="margin-top: 20px; padding: 0 16px;">
-                <button class="btn-primary" style="width: 100%; margin: 0; background: var(--accent-color); color: #0b0b0b;" onclick="login()">Prijavi se</button>
+                <button class="btn-primary" style="width: 100%; margin: 0;" onclick="login()">Prijavi se</button>
             </div>
-            <p style="text-align: center; margin-top: 20px; font-size: 0.8rem; color: #f0f0f0; font-weight: 600;">
+            <p style="text-align: center; margin-top: 20px; font-size: 0.8rem; color: var(--text-muted);">
                 Test nalozi: admin / admin ili stefan / 123
             </p>
         </div>
