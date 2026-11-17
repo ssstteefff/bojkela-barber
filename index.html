@@ -138,6 +138,9 @@
             border-bottom-right-radius: 20px;
             margin-bottom: 20px;
         }
+        .service-header-bg.beard-bg {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.9)), url('https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&w=800&q=80') center/cover;
+        }
         .categories {
             display: flex;
             justify-content: center;
@@ -193,7 +196,7 @@
             margin-bottom: 4px;
         }
         .service-title {
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 700;
             color: #ffffff;
             text-transform: uppercase;
@@ -450,9 +453,9 @@
             <div id="admin-days-list"></div>
         </div>
 
-        <!-- KLIJENT POGLED (Usluge & Cenovnik) -->
+        <!-- KLIJENT POGLED (Usluge & Cenovnik - Šišanje) -->
         <div id="client-view" class="hidden">
-            <div class="service-header-bg">
+            <div class="service-header-bg" id="service-header">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <span style="color: #fff; font-size: 14px; font-weight: 500; cursor: pointer;" onclick="logout()">&larr; Odjavi se</span>
                     <h1 style="font-size: 1.1rem; color: var(--accent-color); letter-spacing: 1px; text-transform: uppercase;">Bojkela Barber</h1>
@@ -460,14 +463,15 @@
                 <div style="text-align: center; margin-top: 15px;">
                     <h2 style="font-size: 18px; color: var(--accent-color); text-transform: uppercase; margin-bottom: 5px;">Usluge & Cenovnik</h2>
                     <div class="categories">
-                        <span class="category active">Šišanje</span>
-                        <span class="category">Brada</span>
-                        <span class="category">Kompleti</span>
+                        <span class="category active" id="cat-sisanje" onclick="switchCategory('sisanje')">Šišanje</span>
+                        <span class="category" id="cat-brada" onclick="switchCategory('brada')">Brada</span>
+                        <span class="category" id="cat-kompleti" onclick="switchCategory('kompleti')">Kompleti</span>
                     </div>
                 </div>
             </div>
 
-            <div class="services-list">
+            <!-- Lista usluga za šišanje -->
+            <div class="services-list" id="list-sisanje">
                 <div class="service-card">
                     <div class="service-content">
                         <img src="https://images.unsplash.com/photo-1622286342621-4bd786c2447c?auto=format&fit=crop&w=200&q=80" alt="Fade šišanje" class="service-img">
@@ -499,6 +503,57 @@
                 </div>
             </div>
 
+            <!-- Lista usluga za bradu (dopisano prema slici) -->
+            <div class="services-list hidden" id="list-brada">
+                <div class="service-card">
+                    <div class="service-content">
+                        <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=200&q=80" alt="Oblikovanje brade" class="service-img">
+                        <div class="service-info">
+                            <div class="service-header-row">
+                                <span class="service-title">Oblikovanje brade</span>
+                                <a href="#" class="details-link">Detalji &rarr;</a>
+                            </div>
+                            <div class="service-details">Trajanje: 20 minuta</div>
+                            <div class="service-details">Fiksna cena: 1.000,00 RSD</div>
+                        </div>
+                    </div>
+                    <button class="btn-primary" style="width: 100%; margin: 10px 0 0 0;" onclick="openBookingScreen('Oblikovanje brade', '1.000,00 RSD')">Rezerviši</button>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-content">
+                        <img src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&w=200&q=80" alt="Skraćivanje/sređivanje brade" class="service-img">
+                        <div class="service-info">
+                            <div class="service-header-row">
+                                <span class="service-title">Skraćivanje/sređivanje...</span>
+                                <a href="#" class="details-link">Detalji &rarr;</a>
+                            </div>
+                            <div class="service-details">Trajanje: 10 minuta</div>
+                            <div class="service-details">Fiksna cena: 500,00 RSD</div>
+                        </div>
+                    </div>
+                    <button class="btn-primary" style="width: 100%; margin: 10px 0 0 0;" onclick="openBookingScreen('Skraćivanje/sređivanje brade', '500,00 RSD')">Rezerviši</button>
+                </div>
+            </div>
+
+            <!-- Lista usluga za kompleti -->
+            <div class="services-list hidden" id="list-kompleti">
+                <div class="service-card">
+                    <div class="service-content">
+                        <img src="https://images.unsplash.com/photo-1517832606293-7ae2fcff44aa?auto=format&fit=crop&w=200&q=80" alt="Šišanje i brada" class="service-img">
+                        <div class="service-info">
+                            <div class="service-header-row">
+                                <span class="service-title">Šišanje i brada</span>
+                                <a href="#" class="details-link">Detalji &rarr;</a>
+                            </div>
+                            <div class="service-details">Trajanje: 45 minuta</div>
+                            <div class="service-details">Fiksna cena: 2.200,00 RSD</div>
+                        </div>
+                    </div>
+                    <button class="btn-primary" style="width: 100%; margin: 10px 0 0 0;" onclick="openBookingScreen('Šišanje i brada', '2.200,00 RSD')">Rezerviši</button>
+                </div>
+            </div>
+
             <div style="padding: 20px 16px 10px 16px;">
                 <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Moji termini</p>
                 <div id="client-appointments-list"></div>
@@ -524,7 +579,7 @@
                 <!-- Dinamički prikaz termina ili poruke da nema termina -->
                 <div id="time-slots-section"></div>
 
-                <!-- Detalji izabrane usluge (bez imena frizera, sa desnom stranom) -->
+                <!-- Detalji izabrane usluge -->
                 <div class="booking-info-card">
                     <div>
                         <div id="booking-service-title" style="font-weight: bold; font-size: 0.95rem; text-transform: uppercase;">FADE ŠIŠANJE</div>
@@ -607,9 +662,6 @@
         { id: 1, name: "Nikola Nikolić", service: "Fade šišanje", date: "2026-11-18", time: "15:00", datetime: "2026-11-18 u 15:00h", email: "nikola@mail.com", phone: "060 111222" }
     ];
 
-    let openDays = {};
-    let openHours = {};
-
     function login() {
         const email = document.getElementById('login-email').value.trim().toLowerCase();
         const pass = document.getElementById('login-password').value.trim();
@@ -625,6 +677,7 @@
             showScreen('client-view');
             document.getElementById('bottom-nav').style.display = 'flex';
             setActiveNav('termini');
+            switchCategory('sisanje');
             renderClientAppointments();
         } else {
             alert('Pogrešan email ili šifra! Koristite stefan / 123 ili admin / admin.');
@@ -661,6 +714,7 @@
                 renderAdminAppointments();
             } else {
                 showScreen('client-view');
+                document.getElementById('bottom-nav').style.display = 'flex';
                 renderClientAppointments();
             }
         } else if (tabName === 'kontakt') {
@@ -676,6 +730,32 @@
         document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
         const activeItem = document.getElementById('nav-' + tabName);
         if (activeItem) activeItem.classList.add('active');
+    }
+
+    function switchCategory(category) {
+        document.getElementById('cat-sisanje').classList.remove('active');
+        document.getElementById('cat-brada').classList.remove('active');
+        document.getElementById('cat-kompleti').classList.remove('active');
+
+        document.getElementById('list-sisanje').classList.add('hidden');
+        document.getElementById('list-brada').classList.add('hidden');
+        document.getElementById('list-kompleti').classList.add('hidden');
+
+        const headerBg = document.getElementById('service-header');
+
+        if (category === 'sisanje') {
+            document.getElementById('cat-sisanje').classList.add('active');
+            document.getElementById('list-sisanje').classList.remove('hidden');
+            headerBg.classList.remove('beard-bg');
+        } else if (category === 'brada') {
+            document.getElementById('cat-brada').classList.add('active');
+            document.getElementById('list-brada').classList.remove('hidden');
+            headerBg.classList.add('beard-bg');
+        } else if (category === 'kompleti') {
+            document.getElementById('cat-kompleti').classList.add('active');
+            document.getElementById('list-kompleti').classList.remove('hidden');
+            headerBg.classList.remove('beard-bg');
+        }
     }
 
     function openBookingScreen(serviceName, price) {
